@@ -20,6 +20,7 @@ player = Player(tela, largura_tela // 2 - 50, altura_tela - 350, largura_tela)
 
 tempo_ultimo_inimigo = pygame.time.get_ticks()
 ultimo_tempo = pygame.time.get_ticks()
+ultimo_tiro = 0
 
 lista_lasers = []  # Lista para armazenar os lasers disparados pelo jogador
 lista_objetos = []  # Lista para armazenar objetos
@@ -29,14 +30,21 @@ while jogo:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                exit() 
 
     tela.fill('Blue')
 
     player.control()  # Controla o jogador e dispara lasers
     if player.shoot:  # Se o jogador estiver atirando
-        player.shoot = False  # Reinicia o flag de tiro do jogador
-        laser = Laser(player.rect.midtop)  # Cria um laser na posição do jogador
-        lista_lasers.append(laser)  # Adiciona o laser à lista de lasers
+        tempo_atual = pygame.time.get_ticks()
+        if tempo_atual - ultimo_tiro >= 300:
+            player.shoot = False  # Reinicia o flag de tiro do jogador
+            laser = Laser(player.rect.midtop)  # Cria um laser na posição do jogador
+            lista_lasers.append(laser)  # Adiciona o laser à lista de lasers
+            ultimo_tiro = tempo_atual
 
     # Atualiza os lasers disparados pelo jogador e verifica colisão com inimigos
     for laser in lista_lasers[:]:
@@ -79,6 +87,8 @@ while jogo:
         tela.blit(laser.image, laser.rect)  # Desenha os lasers na tela
 
     player.draw()  # Desenha o jogador na tela
+
+    player.shoot = False
 
     pygame.display.flip()
     fps.tick(60)
