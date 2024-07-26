@@ -58,7 +58,6 @@ while jogo:
         for objeto in lista_objetos[:]:
             if pygame.sprite.collide_rect(laser, objeto):
                 lista_lasers.remove(laser)  # Remove o laser da lista
-                break  # Interrompe o loop assim que encontrar uma colisão
 
     for inimigo in inimigos[:]:
         inimigo.mover()
