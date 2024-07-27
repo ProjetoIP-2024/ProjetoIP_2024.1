@@ -4,7 +4,7 @@ from laser import Laser
 class Player(pygame.sprite.Sprite):
     def __init__(self, tela, x, y, largura_tela):
         super().__init__()
-        self.sprite = pygame.image.load('./imagens/navio.png')
+        self.sprite = pygame.image.load('./imagens/navio_old.png')
         self.sprite = pygame.transform.scale(self.sprite, (150, 200))
         self.rect = self.sprite.get_rect(topleft=(x, y))
         self.tela = tela
@@ -14,6 +14,9 @@ class Player(pygame.sprite.Sprite):
         self.velocidade = 5
         self.shoot = False
         self.vida = 5
+        self.canhao = False
+        self.canhao_melhor = False
+
 
     def control(self):
         teclas = pygame.key.get_pressed()
@@ -40,3 +43,18 @@ class Player(pygame.sprite.Sprite):
         if self.vida < 0:
             return False
         return True
+    
+    def evolucao_canhao_melhor(self, canhao):
+        if canhao:
+            self.sprite = pygame.image.load('./imagens/Barco_exemplo2FINAL.png')
+            self.sprite = pygame.transform.scale(self.sprite, (150, 200))
+            self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
+            self.velocidade = 5
+
+    def evolucao_canhao(self, canhao):
+        if canhao:
+            self.sprite = pygame.image.load('./imagens/navio_old2.png')
+            self.sprite = pygame.transform.scale(self.sprite, (150, 200))
+            self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
+            self.velocidade = 5
+        
