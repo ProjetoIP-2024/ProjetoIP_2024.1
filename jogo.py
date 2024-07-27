@@ -4,9 +4,12 @@ from inimigo import Inimigos
 from player import Player
 from obstaculos import Objeto
 from laser import Laser
-
+from random import randint
 pygame.init()
 
+matou = False
+já_evoluiu1 = False
+já_evoluiu2 = False
 largura_tela = 1920
 altura_tela = 1080
 tela = pygame.display.set_mode((largura_tela, altura_tela))
@@ -94,6 +97,8 @@ while True:
                     # Verifica se o laser está na lista antes de tentar removê-lo
                     if laser in lista_lasers:
                         lista_lasers.remove(laser)  # Remove o laser da lista
+                    num_aleatorio = randint(1, 100)
+                    matou = True
             # Verifica colisão com objetos
             for objeto in lista_objetos[:]:
                 if pygame.sprite.collide_rect(laser, objeto):
@@ -136,6 +141,23 @@ while True:
 
         for laser in lista_lasers:
             tela.blit(laser.sprite, laser.rect)  # Desenha os lasers na tela
+
+        if matou:
+            if 1 == num_aleatorio and not já_evoluiu1:#Item de maior raridade, garante o melho canhão disponível ao player
+                player.canhao_melhor = True
+                player.evolucao_canhao_melhor(player.canhao_melhor)
+                já_evoluiu1 = True
+            elif 1 < num_aleatorio <= 5 and not já_evoluiu2 and not já_evoluiu1:#Se já tiver a evolução melhor, não evolui para esse
+                player.canhao = True#Itens raros, que garantem canhões melhores do que o inicial
+                player.evolucao_canhao(player.canhao)
+                já_evoluiu2 = True
+            elif 5 < num_aleatorio <= 50:#Drop de moedas, para desbloquear outras coisas
+                print(f"Moedas = {num_aleatorio}")
+            elif 50 < num_aleatorio <= 100:#Drop de sucata, um coletável extra que não tem tanta importância
+                print(f"Sucata = {num_aleatorio}") 
+            num_aleatorio = 0
+            matou = False
+
 
         player.draw()  # Desenha o jogador na tela
 
