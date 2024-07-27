@@ -80,7 +80,7 @@ while True:
             tempo_atual = pygame.time.get_ticks()
             if tempo_atual - ultimo_tiro >= 300:
                 player.shoot = False  # Reinicia o flag de tiro do jogador
-                laser = Laser(player.rect.midtop, -8)  # Cria um laser na posição do jogador
+                laser = Laser(player.rect.midtop, -8, 'canhao')  # Cria um laser na posição do jogador
                 lista_lasers.append(laser)  # Adiciona o laser à lista de lasers
                 ultimo_tiro = tempo_atual
 
@@ -103,7 +103,7 @@ while True:
             inimigo.mover()
             inimigo.gerar_inimigos()
             if inimigo.atirar():
-                laser = Laser(inimigo.rect.midbottom, 8)  # Cria um laser que se move para baixo
+                laser = Laser(inimigo.rect.midbottom, 8, 'fogo')  # Cria um laser que se move para baixo
                 lista_lasers_inimigo.append(laser)  # Adiciona o laser à lista de lasers
 
         tempo_atual = pygame.time.get_ticks()
@@ -124,7 +124,7 @@ while True:
         
         for laser in lista_lasers_inimigo[:]:
             laser.update()
-            tela.blit(laser.image, laser.rect)
+            tela.blit(laser.sprite, laser.rect)
             if laser.rect.y > tela.get_height():  # Remove lasers que saem da tela
                 lista_lasers_inimigo.remove(laser)
             elif pygame.sprite.collide_rect(laser, player):
@@ -135,7 +135,7 @@ while True:
             objeto.draw()
 
         for laser in lista_lasers:
-            tela.blit(laser.image, laser.rect)  # Desenha os lasers na tela
+            tela.blit(laser.sprite, laser.rect)  # Desenha os lasers na tela
 
         player.draw()  # Desenha o jogador na tela
 
