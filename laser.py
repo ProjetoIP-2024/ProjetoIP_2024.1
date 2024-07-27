@@ -1,17 +1,11 @@
 import pygame
-import sys
-
-x = 1920 #DIMENSÕES DA TELA(EIXO X)
-y = 1080 #DIMENSÕES DA TELA(EIXO Y)
-screen = pygame.display.set_mode((x, y)) #criei essa variavel para poder chamamar a "tela" mais para frente -- João
-time = pygame.time.Clock() #tambem botei essa variavel para contar o tempo de duração da partida -- João
 
 class Laser(pygame.sprite.Sprite):
-    def __init__(self, pos, speed=-8):
+    def __init__(self, pos, speed, imagem):
         super().__init__()
-        self.image = pygame.Surface((4, 20))
-        self.image.fill('white')
-        self.rect = self.image.get_rect(center=pos)
+        self.sprite = pygame.image.load('./imagens/' + imagem +'.png')
+        self.sprite = pygame.transform.scale(self.sprite, (75, 75))
+        self.rect = self.sprite.get_rect(center=pos)
         self.speed = speed
 
     def update(self):
