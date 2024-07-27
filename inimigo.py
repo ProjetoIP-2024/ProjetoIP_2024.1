@@ -12,6 +12,7 @@ class Inimigos(pygame.sprite.Sprite):
         self.ultimo_movimento = pygame.time.get_ticks()
         self.direcao_x = self.velocidade 
         self.direcao_y = 0 
+        self.ultimo_tiro = 0
 
     def gerar_inimigos(self):
         self.tela.blit(self.sprite, self.rect)
@@ -37,3 +38,10 @@ class Inimigos(pygame.sprite.Sprite):
     def gerar_novo_inimigo(self):
         novo_inimigo = Inimigos(0, 0, self.tela)
         return novo_inimigo
+
+    def atirar(self):
+        tempo_atual = pygame.time.get_ticks()
+        if tempo_atual - self.ultimo_tiro >= 3000:
+            self.ultimo_tiro = tempo_atual
+            return True
+        return False
