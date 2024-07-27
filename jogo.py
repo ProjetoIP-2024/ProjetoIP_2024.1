@@ -91,7 +91,9 @@ while True:
             for inimigo in inimigos[:]:
                 if pygame.sprite.collide_rect(laser, inimigo):
                     inimigos.remove(inimigo)  # Remove o inimigo do grupo
-                    lista_lasers.remove(laser)  # Remove o laser da lista
+                    # Verifica se o laser está na lista antes de tentar removê-lo
+                    if laser in lista_lasers:
+                        lista_lasers.remove(laser)  # Remove o laser da lista
             # Verifica colisão com objetos
             for objeto in lista_objetos[:]:
                 if pygame.sprite.collide_rect(laser, objeto):
