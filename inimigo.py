@@ -41,7 +41,7 @@ class Inimigos(pygame.sprite.Sprite):
 
     def atirar(self):
         tempo_atual = pygame.time.get_ticks()
-        if tempo_atual - self.ultimo_tiro >= 3000:
+        if tempo_atual - self.ultimo_tiro >= 5000:
             self.ultimo_tiro = tempo_atual
             return True
         return False
