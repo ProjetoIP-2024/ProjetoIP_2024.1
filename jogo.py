@@ -32,12 +32,29 @@ lista_lasers_inimigo = []
 lista_objetos = []
 lista_coletaveis = []  # Lista para armazenar os coletáveis
 
+# Contadores de itens coletados
+contador_moedas = 0
+contador_sucata = 0
+
 def desenhar_menu(mensagem):
     tela.fill((0, 0, 0))
     fonte = pygame.font.SysFont(None, 74)
     texto = fonte.render(mensagem, True, (255, 255, 255))
     tela.blit(texto, (largura_tela // 2 - texto.get_width() // 2, altura_tela // 2 - texto.get_height() // 2))
     pygame.display.flip()
+
+def desenhar_contadores():
+    fonte = pygame.font.SysFont(None, 36)
+    texto_vida = fonte.render(f"Vida: {player.vida}", True, (255, 0, 0))
+    texto_moeda = fonte.render(f"Moedas: {contador_moedas}", True, (255, 255, 0))
+    texto_sucata = fonte.render(f"Sucata: {contador_sucata}", True, (128, 128, 128))
+    
+    # Desenha o contador de vida no canto superior esquerdo
+    tela.blit(texto_vida, (10, 10))
+    # Desenha o contador de moedas abaixo do contador de vida
+    tela.blit(texto_moeda, (10, 50))
+    # Desenha o contador de sucata abaixo do contador de moedas
+    tela.blit(texto_sucata, (10, 90))
 
 jogo = False
 menu = True
@@ -61,6 +78,8 @@ while True:
                     lista_lasers_inimigo = []
                     lista_objetos = []
                     lista_coletaveis = []  # Limpa a lista de coletáveis
+                    contador_moedas = 0
+                    contador_sucata = 0
                 elif not jogo:
                     jogo = True
                     menu = False
@@ -88,7 +107,7 @@ while True:
             tempo_atual = pygame.time.get_ticks()
             if tempo_atual - ultimo_tiro >= 300:
                 player.shoot = False
-                laser = Laser(player.rect.midtop, -8, 'canhao')
+                laser = Laser(player.rect.midtop, -8, 'bala_canhao')
                 lista_lasers.append(laser)
                 ultimo_tiro = tempo_atual
 
@@ -104,20 +123,12 @@ while True:
                     matou = True
                     
                     if num_aleatorio == 1 and not já_evoluiu1:
-                        player.canhao_melhor = True
-                        player.evolucao_canhao_melhor(player.canhao_melhor)
-                        já_evoluiu1 = True
                         tipo_coletavel = 'canhao_melhor'
                     elif 1 < num_aleatorio <= 5 and not já_evoluiu2 and not já_evoluiu1:
-                        player.canhao = True
-                        player.evolucao_canhao(player.canhao)
-                        já_evoluiu2 = True
                         tipo_coletavel = 'canhao'
                     elif 5 < num_aleatorio <= 50:
-                        print(f"Moedas = {num_aleatorio}")
                         tipo_coletavel = 'moeda'
                     elif 50 < num_aleatorio <= 100:
-                        print(f"Sucata = {num_aleatorio}")
                         tipo_coletavel = 'sucata'
                     else:
                         tipo_coletavel = None
@@ -144,7 +155,7 @@ while True:
             tempo_ultimo_inimigo = tempo_atual
 
         if tempo_atual - ultimo_tempo >= 1200:
-            objeto = Objeto(tela, -230, 650, (255, 255, 255))
+            objeto = Objeto(-230, 650, tela)
             lista_objetos.append(objeto)
             ultimo_tempo = tempo_atual
 
@@ -164,20 +175,25 @@ while True:
                 
         for coletavel in lista_coletaveis[:]:
             coletavel.update()
-            tela.blit(coletavel.image, coletavel.rect)
+            tela.blit(coletavel.sprite, coletavel.rect)
             if coletavel.rect.y > altura_tela:
                 lista_coletaveis.remove(coletavel)
             elif pygame.sprite.collide_rect(coletavel, player):
                 if coletavel.tipo == 'canhao_melhor':
                     player.canhao_melhor = True
+                    já_evoluiu1 = True
                     player.evolucao_canhao_melhor(player.canhao_melhor)
                 elif coletavel.tipo == 'canhao':
                     player.canhao = True
                     player.evolucao_canhao(player.canhao)
+                    já_evoluiu2 = True
                 elif coletavel.tipo == 'moeda':
                     print("Moeda coletada")
+                    contador_moedas += 1  # Incrementa o contador de moedas
                 elif coletavel.tipo == 'sucata':
                     print("Sucata coletada")
+                    contador_sucata += 1  # Incrementa o contador de sucata
+                    player.receber_dano(1)  # Perde 1 de vida ao coletar sucata
                 lista_coletaveis.remove(coletavel)
 
         for objeto in lista_objetos:
@@ -187,6 +203,7 @@ while True:
             tela.blit(laser.sprite, laser.rect)
 
         player.draw()
+        desenhar_contadores()  # Desenha os contadores na tela
 
         player.shoot = False
 
