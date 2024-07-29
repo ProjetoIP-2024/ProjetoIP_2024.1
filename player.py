@@ -16,6 +16,8 @@ class Player(pygame.sprite.Sprite):
         self.vida = 5
         self.canhao = False
         self.canhao_melhor = False
+        self.level = 1
+        self.lasers = pygame.sprite.Group()
 
 
     def control(self):
@@ -28,6 +30,8 @@ class Player(pygame.sprite.Sprite):
                 self.rect.x += self.velocidade
         if teclas[pygame.K_SPACE]:
             self.shoot = True
+            self.tiros()
+            print(self.level)
 
     def draw(self):
         self.tela.blit(self.sprite, self.rect)
@@ -50,11 +54,28 @@ class Player(pygame.sprite.Sprite):
             self.sprite = pygame.transform.scale(self.sprite, (150, 200))
             self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
             self.velocidade = 5
+            self.level_up_3()
 
     def evolucao_canhao(self, canhao):
         if canhao:
-            self.sprite = pygame.image.load('./imagens/navio_old2.png')
+            self.sprite = pygame.image.load('./imagens/navio.png')
             self.sprite = pygame.transform.scale(self.sprite, (150, 200))
             self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
             self.velocidade = 5
-        
+            self.level_up_2()
+    
+    def level_up_2(self):
+        self.level = 2
+
+    def level_up_3(self):
+        self.level = 3    
+
+    def tiros(self):
+        if self.level == 1:
+            laser = Laser(self.rect.midtop, -10, 0, 'bala_canhao')
+            self.lasers.add(laser)
+        elif self.level == 2:
+            laser_central = Laser(self.rect.midtop, -10, 0, 'bala_canhao')
+            laser_esquerdo = Laser(self.rect.midtop, -10, -2, 'bala_canhao')
+            laser_direito = Laser(self.rect.midtop, -10, -2, 'bala_canhao')
+            self.lasers.add(laser_central, laser_esquerdo, laser_direito)
