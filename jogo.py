@@ -117,6 +117,13 @@ while True:
                     lista_lasers.append(laser_central)
                     lista_lasers.append(laser_esquerdo)
                     lista_lasers.append(laser_direito)
+                elif player.level == 3:
+                    laser_central = Laser(player.rect.midtop, -10, 0, 'bala_canhao')
+                    laser_esquerdo = Laser(player.rect.midtop, -10, -2, 'bala_canhao')
+                    laser_direito = Laser(player.rect.midtop, -10, 2, 'bala_canhao')
+                    lista_lasers.append(laser_central)
+                    lista_lasers.append(laser_esquerdo)
+                    lista_lasers.append(laser_direito)
 
                 ultimo_tiro = tempo_atual
 
