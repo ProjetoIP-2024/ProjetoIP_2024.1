@@ -107,8 +107,17 @@ while True:
             tempo_atual = pygame.time.get_ticks()
             if tempo_atual - ultimo_tiro >= 300:
                 player.shoot = False
-                laser = Laser(player.rect.midtop, -8, 'bala_canhao')
-                lista_lasers.append(laser)
+                if player.level == 1:
+                    laser = Laser(player.rect.midtop, -10, 0,  'bala_canhao')
+                    lista_lasers.append(laser)
+                elif player.level == 2:
+                    laser_central = Laser(player.rect.midtop, -10, 0, 'bala_canhao')
+                    laser_esquerdo = Laser(player.rect.midtop, -10, -2, 'bala_canhao')
+                    laser_direito = Laser(player.rect.midtop, -10, 2, 'bala_canhao')
+                    lista_lasers.append(laser_central)
+                    lista_lasers.append(laser_esquerdo)
+                    lista_lasers.append(laser_direito)
+
                 ultimo_tiro = tempo_atual
 
         for laser in lista_lasers[:]:
@@ -145,7 +154,7 @@ while True:
             inimigo.mover()
             inimigo.gerar_inimigos()
             if inimigo.atirar():
-                laser = Laser(inimigo.rect.midbottom, 8, 'fogo')
+                laser = Laser(inimigo.rect.midbottom, 8, 0, 'fogo')
                 lista_lasers_inimigo.append(laser)
 
         tempo_atual = pygame.time.get_ticks()
@@ -183,10 +192,12 @@ while True:
                     player.canhao_melhor = True
                     já_evoluiu1 = True
                     player.evolucao_canhao_melhor(player.canhao_melhor)
+                    player.level_up_3()
                 elif coletavel.tipo == 'canhao':
                     player.canhao = True
                     player.evolucao_canhao(player.canhao)
                     já_evoluiu2 = True
+                    player.level_up_2()
                 elif coletavel.tipo == 'moeda':
                     print("Moeda coletada")
                     contador_moedas += 1  # Incrementa o contador de moedas
