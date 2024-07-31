@@ -40,7 +40,7 @@ class Player(pygame.sprite.Sprite):
     def desenhar_vida(self):
         fonte = pygame.font.SysFont(None, 36)
         vida_texto = fonte.render(f'Vida: {self.vida}', True, (255, 0, 0))
-        self.tela.blit(vida_texto, (10, 10))
+        self.tela.blit(vida_texto, (10, 950))
 
     def receber_dano(self, dano):
         self.vida -= dano
