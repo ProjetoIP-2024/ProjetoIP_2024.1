@@ -2,13 +2,13 @@ import pygame
 
 class Inimigos(pygame.sprite.Sprite):
     
-    def __init__(self, x, y, tela):
+    def __init__(self, x, y, tela, velocidade, caminho):
         super().__init__()
-        self.sprite = pygame.image.load('./imagens/inimigo.png')
+        self.sprite = pygame.image.load('./imagens/' + caminho + '.png')
         self.sprite = pygame.transform.scale(self.sprite, (100, 200))
         self.rect = self.sprite.get_rect(topleft=(x, y))
         self.tela = tela
-        self.velocidade = 20
+        self.velocidade = velocidade
         self.ultimo_movimento = pygame.time.get_ticks()
         self.direcao_x = self.velocidade 
         self.direcao_y = 0 
@@ -35,8 +35,8 @@ class Inimigos(pygame.sprite.Sprite):
 
             self.ultimo_movimento = tempo_atual
 
-    def gerar_novo_inimigo(self):
-        novo_inimigo = Inimigos(0, 0, self.tela)
+    def gerar_novo_inimigo(self, velocidade, imagem):
+        novo_inimigo = Inimigos(0, 0, self.tela, velocidade, imagem)
         return novo_inimigo
 
     def atirar(self):
