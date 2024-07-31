@@ -52,15 +52,18 @@ class Jogo:
 
     def desenhar_contadores(self):
         fonte = pygame.font.SysFont(None, 36)
+        texto_vida = fonte.render(f"Vida: {self.player.vida}", True, (255, 0, 0))
         texto_moeda = fonte.render(f"Moedas: {self.contador_moedas}", True, (255, 255, 0))
         texto_sucata = fonte.render(f"Sucata: {self.contador_sucata}", True, (128, 128, 128))
         texto_inimigos_mortos = fonte.render(f"Inimigos Mortos: {self.contador_inimigos_mortos}", True, (255, 255, 255))
         fase = fonte.render(f"{self.fase}", True, (255, 255, 255))
 
-        self.tela.blit(texto_moeda, (160, 950))
-        self.tela.blit(texto_sucata, (310, 950))
-        self.tela.blit(texto_inimigos_mortos, (460, 950))  # Novo contador
-        self.tela.blit(fase, (10, 10))  # Novo contador
+
+        self.tela.blit(texto_vida, (10, 10))
+        self.tela.blit(texto_moeda, (10, 50))
+        self.tela.blit(texto_sucata, (10, 90))
+        self.tela.blit(texto_inimigos_mortos, (10, 130))  # Novo contador
+        self.tela.blit(fase, (10, 170))  # Novo contador
 
 
     def checar_colisoes(self):
@@ -212,6 +215,10 @@ class Jogo:
                             self.contador_sucata = 0
                             self.contador_inimigos_mortos = 0
                             self.imagem_inimigo = 'inimigo'
+                            self.inimigos_por_nivel = 19
+                            self.inimigos_vivos = 20
+                            self.intervalo_tempo = 2000
+                            self.velocidade_tiro_inimigo = 8
 
             if self.menu:
                 self.desenhar_menu("BEM VINDO! APERTE ENTER PARA COMEÇAR")
@@ -272,8 +279,13 @@ class Jogo:
                 if not self.player.receber_dano(0):
                     self.jogo = False
 
+                for inimigo in self.inimigos:
+                    if pygame.sprite.collide_rect(inimigo, self.player):
+                        self.jogo = False
+
                 pygame.display.flip()
                 self.fps.tick(60)
+
             elif not self.jogo:
                 self.desenhar_menu('VOCÊ PERDEU! APERTE ENTER PARA REINICIAR OU ESC PARA FECHAR')
 
