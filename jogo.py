@@ -4,143 +4,81 @@ from inimigo import Inimigos
 from player import Player
 from obstaculos import Objeto
 from laser import Laser
-from coletavel import Coletavel  # Importa a nova classe Coletavel
+from coletavel import Coletavel
 from random import randint
 
-pygame.init()
+class Jogo:
 
-matou = False
-já_evoluiu1 = False
-já_evoluiu2 = False
-largura_tela = 1920
-altura_tela = 1080
-tela = pygame.display.set_mode((largura_tela, altura_tela))
-print(tela)
-fps = pygame.time.Clock()
-inimigos = []
-inimigo_principal = Inimigos(0, 0, tela)
-inimigos.append(inimigo_principal)
-player = Player(tela, largura_tela // 2 - 50, altura_tela - 350, largura_tela)
+    def __init__(self):
+        pygame.init()
+        self.largura_tela = 1920
+        self.altura_tela = 1080
+        self.velocidade_inimigo = 20
+        self.tela = pygame.display.set_mode((self.largura_tela, self.altura_tela))
+        self.fps = pygame.time.Clock()
+        self.inimigos = []
+        self.lista_lasers = []
+        self.lista_lasers_inimigo = []
+        self.lista_objetos = []
+        self.lista_coletaveis = []
+        self.contador_moedas = 0
+        self.contador_sucata = 0
+        self.contador_inimigos_mortos = 0  # Novo contador
+        self.jogo = False
+        self.menu = True
+        self.tempo_ultimo_inimigo = pygame.time.get_ticks()
+        self.ultimo_tempo = pygame.time.get_ticks()
+        self.ultimo_tiro = 0
+        self.ultimo_tiro_inimigo = 0
+        self.matou = False
+        self.já_evoluiu1 = False
+        self.já_evoluiu2 = False
+        self.imagem_inimigo = 'inimigo'
+        self.player = Player(self.tela, self.largura_tela // 2 - 50, self.altura_tela - 350, self.largura_tela)
+        self.inimigo_principal = Inimigos(0, 0, self.tela, self.velocidade_inimigo, self.imagem_inimigo)
+        self.inimigos.append(self.inimigo_principal)
+        self.fase = 'fase_1'
+        self.inimigos_por_nivel = 19
+        self.inimigos_vivos = 20
+        self.intervalo_tempo = 2000
+        self.velocidade_tiro_inimigo = 8
 
-tempo_ultimo_inimigo = pygame.time.get_ticks()
-ultimo_tempo = pygame.time.get_ticks()
-ultimo_tiro = 0
-ultimo_tiro_inimigo = 0
+    def desenhar_menu(self, mensagem):
+        self.tela.fill((0, 0, 0))
+        fonte = pygame.font.SysFont(None, 74)
+        texto = fonte.render(mensagem, True, (255, 255, 255))
+        self.tela.blit(texto, (self.largura_tela // 2 - texto.get_width() // 2, self.altura_tela // 2 - texto.get_height() // 2))
+        pygame.display.flip()
 
-lista_lasers = []
-lista_lasers_inimigo = []
-lista_objetos = []
-lista_coletaveis = []  # Lista para armazenar os coletáveis
+    def desenhar_contadores(self):
+        fonte = pygame.font.SysFont(None, 36)
+        texto_moeda = fonte.render(f"Moedas: {self.contador_moedas}", True, (255, 255, 0))
+        texto_sucata = fonte.render(f"Sucata: {self.contador_sucata}", True, (128, 128, 128))
+        texto_inimigos_mortos = fonte.render(f"Inimigos Mortos: {self.contador_inimigos_mortos}", True, (255, 255, 255))
+        fase = fonte.render(f"{self.fase}", True, (255, 255, 255))
 
-# Contadores de itens coletados
-contador_moedas = 0
-contador_sucata = 0
+        self.tela.blit(texto_moeda, (160, 950))
+        self.tela.blit(texto_sucata, (310, 950))
+        self.tela.blit(texto_inimigos_mortos, (460, 950))  # Novo contador
+        self.tela.blit(fase, (10, 10))  # Novo contador
 
-def desenhar_menu(mensagem):
-    tela.fill((0, 0, 0))
-    fonte = pygame.font.SysFont(None, 74)
-    texto = fonte.render(mensagem, True, (255, 255, 255))
-    tela.blit(texto, (largura_tela // 2 - texto.get_width() // 2, altura_tela // 2 - texto.get_height() // 2))
-    pygame.display.flip()
 
-def desenhar_contadores():
-    fonte = pygame.font.SysFont(None, 36)
-    texto_vida = fonte.render(f"Vida: {player.vida}", True, (255, 0, 0))
-    texto_moeda = fonte.render(f"Moedas: {contador_moedas}", True, (255, 255, 0))
-    texto_sucata = fonte.render(f"Sucata: {contador_sucata}", True, (128, 128, 128))
-    
-    # Desenha o contador de vida no canto superior esquerdo
-    tela.blit(texto_vida, (10, 10))
-    # Desenha o contador de moedas abaixo do contador de vida
-    tela.blit(texto_moeda, (10, 50))
-    # Desenha o contador de sucata abaixo do contador de moedas
-    tela.blit(texto_sucata, (10, 90))
-
-jogo = False
-menu = True
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                pygame.quit()
-                exit() 
-            elif event.key == pygame.K_RETURN:
-                if menu:
-                    menu = False
-                    jogo = True
-                    inimigos = []
-                    inimigo_principal = Inimigos(0, 0, tela)
-                    inimigos.append(inimigo_principal)
-                    lista_lasers = []
-                    lista_lasers_inimigo = []
-                    lista_objetos = []
-                    lista_coletaveis = []  # Limpa a lista de coletáveis
-                    contador_moedas = 0
-                    contador_sucata = 0
-                elif not jogo:
-                    jogo = True
-                    menu = False
-                    inimigos = [Inimigos(0, 0, tela)]
-                    player = Player(tela, largura_tela // 2 - 50, altura_tela - 350, largura_tela)
-                    lista_lasers = []
-                    lista_objetos = []
-                    lista_lasers_inimigo = []
-                    lista_coletaveis = []
-                    tempo_ultimo_inimigo = pygame.time.get_ticks()
-                    ultimo_tempo = pygame.time.get_ticks()
-                    ultimo_tiro = 0
-                    ultimo_tiro_inimigo = 0
-
-    if menu:
-        desenhar_menu("BEM VINDO! APERTE ENTER PARA COMEÇAR")
-
-    elif jogo:
-        tela.fill('Blue')
-
-        player.control()
-        player.desenhar_vida()
-
-        if player.shoot:
-            tempo_atual = pygame.time.get_ticks()
-            if tempo_atual - ultimo_tiro >= 300:
-                player.shoot = False
-                if player.level == 1:
-                    laser = Laser(player.rect.midtop, -10, 0,  'bala_canhao')
-                    lista_lasers.append(laser)
-                elif player.level == 2:
-                    laser_central = Laser(player.rect.midtop, -10, 0, 'bala_canhao')
-                    laser_esquerdo = Laser(player.rect.midtop, -10, -2, 'bala_canhao')
-                    laser_direito = Laser(player.rect.midtop, -10, 2, 'bala_canhao')
-                    lista_lasers.append(laser_central)
-                    lista_lasers.append(laser_esquerdo)
-                    lista_lasers.append(laser_direito)
-                elif player.level == 3:
-                    laser_central = Laser(player.rect.midtop, -10, 0, 'bala_canhao')
-                    laser_esquerdo = Laser(player.rect.midtop, -10, -2, 'bala_canhao')
-                    laser_direito = Laser(player.rect.midtop, -10, 2, 'bala_canhao')
-                    lista_lasers.append(laser_central)
-                    lista_lasers.append(laser_esquerdo)
-                    lista_lasers.append(laser_direito)
-
-                ultimo_tiro = tempo_atual
-
-        for laser in lista_lasers[:]:
+    def checar_colisoes(self):
+        for laser in self.lista_lasers[:]:
             laser.update()
-            for inimigo in inimigos[:]:
+            for inimigo in self.inimigos[:]:
                 if pygame.sprite.collide_rect(laser, inimigo):
-                    inimigos.remove(inimigo)
-                    if laser in lista_lasers:
-                        lista_lasers.remove(laser)
-                    
+                    self.inimigos.remove(inimigo)
+                    self.lista_lasers.remove(laser)
+                    self.inimigos_vivos -=1
+                    self.contador_inimigos_mortos += 1  # Incrementar contador
+
                     num_aleatorio = randint(1, 100)
-                    matou = True
-                    
-                    if num_aleatorio == 1 and not já_evoluiu1:
+                    self.matou = True
+
+                    if num_aleatorio == 1 and not self.já_evoluiu1:
                         tipo_coletavel = 'canhao_melhor'
-                    elif 1 < num_aleatorio <= 5 and not já_evoluiu2 and not já_evoluiu1:
+                    elif 1 < num_aleatorio <= 5 and not self.já_evoluiu2 and not self.já_evoluiu1:
                         tipo_coletavel = 'canhao'
                     elif 5 < num_aleatorio <= 50:
                         tipo_coletavel = 'moeda'
@@ -151,84 +89,194 @@ while True:
 
                     if tipo_coletavel:
                         coletavel = Coletavel(inimigo.rect.x, inimigo.rect.y, tipo_coletavel)
-                        lista_coletaveis.append(coletavel)
-    
-            for objeto in lista_objetos[:]:
+                        self.lista_coletaveis.append(coletavel)
+
+            for objeto in self.lista_objetos[:]:
                 if pygame.sprite.collide_rect(laser, objeto):
-                    lista_lasers.remove(laser)
+                    self.lista_lasers.remove(laser)
 
-        for inimigo in inimigos[:]:
-            inimigo.mover()
-            inimigo.gerar_inimigos()
-            if inimigo.atirar():
-                laser = Laser(inimigo.rect.midbottom, 8, 0, 'fogo')
-                lista_lasers_inimigo.append(laser)
 
+    def atualizar_jogo(self):
         tempo_atual = pygame.time.get_ticks()
-        if tempo_atual - tempo_ultimo_inimigo >= 2000:
-            novo_inimigo = inimigo_principal.gerar_novo_inimigo()
-            inimigos.append(novo_inimigo)
-            tempo_ultimo_inimigo = tempo_atual
 
-        if tempo_atual - ultimo_tempo >= 1200:
-            objeto = Objeto(-230, 650, tela)
-            lista_objetos.append(objeto)
-            ultimo_tempo = tempo_atual
+        if tempo_atual - self.tempo_ultimo_inimigo >= self.intervalo_tempo:
+            if self.inimigos_por_nivel > 0:
+                novo_inimigo = self.inimigo_principal.gerar_novo_inimigo(self.velocidade_inimigo, self.imagem_inimigo)
+                self.inimigos.append(novo_inimigo)
+                self.tempo_ultimo_inimigo = tempo_atual
+                self.inimigos_por_nivel -=1
+            else:
+                if self.inimigos_vivos == self.inimigos_por_nivel:
+                    if self.fase == 'fase_1':
+                        self.fase = 'fase_2'
+                        self.velocidade_inimigo = 40
+                        self.inimigos_por_nivel = 40
+                        self.inimigos_vivos = 40
+                        self.intervalo_tempo = 1200
+                        self.velocidade_tiro_inimigo = 12
+                        self.imagem_inimigo = 'shark(1)'
+                    elif self.fase == 'fase_2':
+                        self.fase = 'fase_3'
+                        self.velocidade_inimigo = 55
+                        self.inimigos_por_nivel = 50
+                        self.inimigos_vivos = 50
+                        self.intervalo_tempo = 800
+                        self.velocidade_tiro_inimigo = 18
+                        self.imagem_inimigo = 'lula'
 
-        for objeto in lista_objetos[:]:
-            objeto.movimentacao()
-            if objeto.rect.x > largura_tela:
-                lista_objetos.remove(objeto)
-        
-        for laser in lista_lasers_inimigo[:]:
+        if tempo_atual - self.ultimo_tempo >= 1200:
+            objeto = Objeto(-230, 650, self.tela)
+            self.lista_objetos.append(objeto)
+            self.ultimo_tempo = tempo_atual
+
+    def processar_lasers_inimigo(self):
+        for laser in self.lista_lasers_inimigo[:]:
             laser.update()
-            tela.blit(laser.sprite, laser.rect)
-            if laser.rect.y > tela.get_height():
-                lista_lasers_inimigo.remove(laser)
-            elif pygame.sprite.collide_rect(laser, player):
-                player.receber_dano(1)
-                lista_lasers_inimigo.remove(laser)
-                
-        for coletavel in lista_coletaveis[:]:
+            self.tela.blit(laser.sprite, laser.rect)
+            if laser.rect.y > self.tela.get_height():
+                self.lista_lasers_inimigo.remove(laser)
+            elif pygame.sprite.collide_rect(laser, self.player):
+                self.player.receber_dano(1)
+                self.lista_lasers_inimigo.remove(laser)
+    
+    def processar_coletaveis(self):
+        for coletavel in self.lista_coletaveis[:]:
             coletavel.update()
-            tela.blit(coletavel.sprite, coletavel.rect)
-            if coletavel.rect.y > altura_tela:
-                lista_coletaveis.remove(coletavel)
-            elif pygame.sprite.collide_rect(coletavel, player):
+            self.tela.blit(coletavel.sprite, coletavel.rect)
+            if coletavel.rect.y > self.altura_tela:
+                self.lista_coletaveis.remove(coletavel)
+            elif pygame.sprite.collide_rect(coletavel, self.player):
                 if coletavel.tipo == 'canhao_melhor':
-                    player.canhao_melhor = True
-                    já_evoluiu1 = True
-                    player.evolucao_canhao_melhor(player.canhao_melhor)
-                    player.level_up_3()
+                    self.player.canhao_melhor = True
+                    self.já_evoluiu1 = True
+                    self.player.evolucao_canhao_melhor(self.player.canhao_melhor)
+                    self.player.level_up_3()
                 elif coletavel.tipo == 'canhao':
-                    player.canhao = True
-                    player.evolucao_canhao(player.canhao)
-                    já_evoluiu2 = True
-                    player.level_up_2()
+                    self.player.canhao = True
+                    self.player.evolucao_canhao(self.player.canhao)
+                    self.já_evoluiu2 = True
+                    self.player.level_up_2()
                 elif coletavel.tipo == 'moeda':
                     print("Moeda coletada")
-                    contador_moedas += 1  # Incrementa o contador de moedas
+                    self.contador_moedas += 1
                 elif coletavel.tipo == 'sucata':
                     print("Sucata coletada")
-                    contador_sucata += 1  # Incrementa o contador de sucata
-                    player.receber_dano(1)  # Perde 1 de vida ao coletar sucata
-                lista_coletaveis.remove(coletavel)
+                    self.contador_sucata += 1
+                    self.player.receber_dano(1)
+                self.lista_coletaveis.remove(coletavel)
 
-        for objeto in lista_objetos:
-            objeto.draw()
+    def executar(self):
+        while True:
+            print(self.fase)
+            print(self.inimigos_vivos)
+            print(self.inimigos_por_nivel)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        exit() 
+                    elif event.key == pygame.K_RETURN:
+                        if self.menu:
+                            self.menu = False
+                            self.jogo = True
+                            self.inimigos = [Inimigos(0, 0, self.tela, self.velocidade_inimigo, self.imagem_inimigo)]
+                            self.player = Player(self.tela, self.largura_tela // 2 - 50, self.altura_tela - 350, self.largura_tela)
+                            self.lista_lasers = []
+                            self.lista_lasers_inimigo = []
+                            self.lista_objetos = []
+                            self.lista_coletaveis = []
+                            self.contador_moedas = 0
+                            self.contador_sucata = 0
+                            self.tempo_ultimo_inimigo = pygame.time.get_ticks()
+                            self.ultimo_tempo = pygame.time.get_ticks()
+                            self.ultimo_tiro = 0
+                            self.ultimo_tiro_inimigo = 0
+                        elif not self.jogo:
+                            self.jogo = True
+                            self.menu = False
+                            self.inimigos = [Inimigos(0, 0, self.tela, self.velocidade_inimigo, self.imagem_inimigo)]
+                            self.player = Player(self.tela, self.largura_tela // 2 - 50, self.altura_tela - 350, self.largura_tela)
+                            self.lista_lasers = []
+                            self.lista_objetos = []
+                            self.lista_lasers_inimigo = []
+                            self.lista_coletaveis = []
+                            self.tempo_ultimo_inimigo = pygame.time.get_ticks()
+                            self.ultimo_tempo = pygame.time.get_ticks()
+                            self.ultimo_tiro = 0
+                            self.ultimo_tiro_inimigo = 0
+                            self.fase = 'fase_1'
+                            self.contador_moedas = 0
+                            self.contador_sucata = 0
+                            self.contador_inimigos_mortos = 0
+                            self.imagem_inimigo = 'inimigo'
 
-        for laser in lista_lasers:
-            tela.blit(laser.sprite, laser.rect)
+            if self.menu:
+                self.desenhar_menu("BEM VINDO! APERTE ENTER PARA COMEÇAR")
 
-        player.draw()
-        desenhar_contadores()  # Desenha os contadores na tela
+            elif self.jogo:
+                self.tela.fill('Blue')
 
-        player.shoot = False
+                self.player.control()
+                self.player.desenhar_vida()
 
-        if not player.receber_dano(0):
-            jogo = False
+                if self.player.shoot:
+                    tempo_atual = pygame.time.get_ticks()
+                    if tempo_atual - self.ultimo_tiro >= 300:
+                        self.player.shoot = False
+                        if self.player.level == 1:
+                            laser = Laser(self.player.rect.midtop, -10, 0, 'bala_canhao')
+                            self.lista_lasers.append(laser)
+                        elif self.player.level == 2:
+                            laser_central = Laser(self.player.rect.midtop, -10, 0, 'bala_canhao')
+                            laser_esquerdo = Laser(self.player.rect.midtop, -10, -2, 'bala_canhao')
+                            laser_direito = Laser(self.player.rect.midtop, -10, 2, 'bala_canhao')
+                            self.lista_lasers.append(laser_central)
+                            self.lista_lasers.append(laser_esquerdo)
+                            self.lista_lasers.append(laser_direito)
 
-        pygame.display.flip()
-        fps.tick(60)
-    elif not jogo:
-        desenhar_menu('VOCÊ PERDEU! APERTE ENTER PARA REINICIAR OU ESC PARA FECHAR')
+                        self.ultimo_tiro = tempo_atual
+
+                self.checar_colisoes()
+
+                for inimigo in self.inimigos[:]:
+                    inimigo.mover()
+                    inimigo.gerar_inimigos()
+                    if inimigo.atirar():
+                        laser = Laser(inimigo.rect.midbottom, self.velocidade_tiro_inimigo, 0, 'fogo')
+                        self.lista_lasers_inimigo.append(laser)
+
+                self.atualizar_jogo()
+
+                for objeto in self.lista_objetos[:]:
+                    objeto.movimentacao()
+                    if objeto.rect.x > self.largura_tela:
+                        self.lista_objetos.remove(objeto)
+                
+                self.processar_lasers_inimigo()
+                self.processar_coletaveis()
+
+                for objeto in self.lista_objetos:
+                    objeto.draw()
+
+                for laser in self.lista_lasers:
+                    self.tela.blit(laser.sprite, laser.rect)
+
+                self.player.draw()
+                self.desenhar_contadores()
+
+                self.player.shoot = False
+
+                if not self.player.receber_dano(0):
+                    self.jogo = False
+
+                pygame.display.flip()
+                self.fps.tick(60)
+            elif not self.jogo:
+                self.desenhar_menu('VOCÊ PERDEU! APERTE ENTER PARA REINICIAR OU ESC PARA FECHAR')
+
+if __name__ == "__main__":
+    jogo = Jogo()
+    jogo.executar()
