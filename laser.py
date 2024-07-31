@@ -1,4 +1,4 @@
-import pygame
+import pygame 
 
 class Laser(pygame.sprite.Sprite):
     def __init__(self, pos, speed, angulo, imagem):
@@ -17,5 +17,3 @@ class Laser(pygame.sprite.Sprite):
     def destruicao(self):
         if self.rect.y < 0:
             self.kill()
-        
-
