@@ -58,7 +58,7 @@ class Player(pygame.sprite.Sprite):
 
     def evolucao_canhao(self, canhao):
         if canhao:
-            self.sprite = pygame.image.load('./imagens/navio.png')
+            self.sprite = pygame.image.load('./imagens/Barco-nivel2.png.png')
             self.sprite = pygame.transform.scale(self.sprite, (150, 200))
             self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
             self.velocidade = 5
