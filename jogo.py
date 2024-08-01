@@ -13,9 +13,9 @@ class Jogo:
         pygame.init()
         self.largura_tela = 1920
         self.altura_tela = 1080
-        self.velocidade_inimigo = 20
         self.tela = pygame.display.set_mode((self.largura_tela, self.altura_tela))
         self.fps = pygame.time.Clock()
+        self.velocidade_inimigo = 20
         self.inimigos = []
         self.lista_lasers = []
         self.lista_lasers_inimigo = []
@@ -200,21 +200,27 @@ class Jogo:
                         elif not self.jogo:
                             self.jogo = True
                             self.menu = False
-                            self.inimigos = [Inimigos(0, 0, self.tela, self.velocidade_inimigo, self.imagem_inimigo)]
-                            self.player = Player(self.tela, self.largura_tela // 2 - 50, self.altura_tela - 350, self.largura_tela)
+                            self.velocidade_inimigo = 20
+                            self.inimigos = []
                             self.lista_lasers = []
-                            self.lista_objetos = []
                             self.lista_lasers_inimigo = []
+                            self.lista_objetos = []
                             self.lista_coletaveis = []
+                            self.contador_moedas = 0
+                            self.contador_sucata = 0
+                            self.contador_inimigos_mortos = 0  # Novo contador
                             self.tempo_ultimo_inimigo = pygame.time.get_ticks()
                             self.ultimo_tempo = pygame.time.get_ticks()
                             self.ultimo_tiro = 0
                             self.ultimo_tiro_inimigo = 0
-                            self.fase = 'fase_1'
-                            self.contador_moedas = 0
-                            self.contador_sucata = 0
-                            self.contador_inimigos_mortos = 0
+                            self.matou = False
+                            self.já_evoluiu1 = False
+                            self.já_evoluiu2 = False
                             self.imagem_inimigo = 'inimigo'
+                            self.player = Player(self.tela, self.largura_tela // 2 - 50, self.altura_tela - 350, self.largura_tela)
+                            self.inimigo_principal = Inimigos(0, 0, self.tela, self.velocidade_inimigo, self.imagem_inimigo)
+                            self.inimigos.append(self.inimigo_principal)
+                            self.fase = 'fase_1'
                             self.inimigos_por_nivel = 19
                             self.inimigos_vivos = 20
                             self.intervalo_tempo = 2000
