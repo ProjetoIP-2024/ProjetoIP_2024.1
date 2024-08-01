@@ -1,5 +1,6 @@
 import pygame
 from laser import Laser
+from explosao import Explosao
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, tela, x, y, largura_tela):
@@ -18,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.canhao_melhor = False
         self.level = 1
         self.lasers = pygame.sprite.Group()
+        self.tiro_especial = pygame.sprite.Group()
 
 
     def control(self):
@@ -32,6 +34,10 @@ class Player(pygame.sprite.Sprite):
             self.shoot = True
             self.tiros()
             print(self.level)
+        if teclas[pygame.K_z]:
+            self.shoot = True
+            self.tiros()
+
 
     def draw(self):
         self.tela.blit(self.sprite, self.rect)
@@ -79,3 +85,12 @@ class Player(pygame.sprite.Sprite):
             laser_esquerdo = Laser(self.rect.midtop, -10, -2, 'bala_canhao')
             laser_direito = Laser(self.rect.midtop, -10, -2, 'bala_canhao')
             self.lasers.add(laser_central, laser_esquerdo, laser_direito)
+        elif self.level == 3:
+            teclas = pygame.key.get_pressed()
+            laser_central = Laser(self.rect.midtop, -10, 0, 'bala_canhao')
+            laser_esquerdo = Laser(self.rect.midtop, -10, -2, 'bala_canhao')
+            laser_direito = Laser(self.rect.midtop, -10, -2, 'bala_canhao')
+            self.lasers.add(laser_central, laser_esquerdo, laser_direito)
+            if teclas[pygame.K_z]:
+                tiro_especial = Laser(self.rect.midtop, -8, 0, 'bala_canhao')
+                self.lasers.add(tiro_especial)

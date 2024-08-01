@@ -4,6 +4,7 @@ from inimigo import Inimigos
 from player import Player
 from obstaculos import Objeto
 from laser import Laser
+from explosao import Explosao
 from coletavel import Coletavel
 from random import randint
 
@@ -42,6 +43,7 @@ class Jogo:
         self.inimigos_vivos = 20
         self.intervalo_tempo = 2000
         self.velocidade_tiro_inimigo = 8
+        self.tiro_eespecial = False
 
     def desenhar_menu(self, mensagem):
         self.tela.fill((0, 0, 0))
@@ -69,30 +71,54 @@ class Jogo:
     def checar_colisoes(self):
         for laser in self.lista_lasers[:]:
             laser.update()
-            for inimigo in self.inimigos[:]:
-                if pygame.sprite.collide_rect(laser, inimigo):
-                    self.inimigos.remove(inimigo)
-                    self.lista_lasers.remove(laser)
-                    self.inimigos_vivos -=1
-                    self.contador_inimigos_mortos += 1  # Incrementar contador
+            print(self.lista_lasers)
+            if self.tiro_eespecial: #ainda nao entra na condicional
+                print('verificou o tiro especial')
+                print(self.inimigos)
+                for inimigo in self.inimigos[:]:
+                    if pygame.sprite.collide_rect(laser, inimigo):
+                        print('colidiu o tiro especial')
+                        laser = Explosao('bala_canhao')
+                        if laser == Explosao('bala_canhao'):
+                            print('o tiro explodiu')
+                        for inimigo in self.inimigos[:]:
+                            if pygame.sprite.collide_rect(laser, inimigo):
+                                self.inimigos.remove(inimigo)
+                                self.lista_lasers.remove(laser)
+                                self.inimigos_vivos -= 1
+                                self.contador_inimigos_mortos += 1
+                                tipo_coletavel = None
+                self.matou = True
+                self.tiro_eespecial = False
+                    
+                self.contador_moedas -= 2
 
-                    num_aleatorio = randint(1, 100)
-                    self.matou = True
+            else:
+                print('deu muito errado')
+                for inimigo in self.inimigos[:]:
+                    if pygame.sprite.collide_rect(laser, inimigo):
+                        self.inimigos.remove(inimigo)
+                        self.lista_lasers.remove(laser)
+                        self.inimigos_vivos -=1
+                        self.contador_inimigos_mortos += 1  # Incrementar contador
 
-                    if num_aleatorio == 1 and not self.já_evoluiu1:
-                        tipo_coletavel = 'canhao_melhor'
-                    elif 1 < num_aleatorio <= 5 and not self.já_evoluiu2 and not self.já_evoluiu1:
-                        tipo_coletavel = 'canhao'
-                    elif 5 < num_aleatorio <= 50:
-                        tipo_coletavel = 'moeda'
-                    elif 50 < num_aleatorio <= 100:
-                        tipo_coletavel = 'sucata'
-                    else:
-                        tipo_coletavel = None
+                        num_aleatorio = randint(1, 100)
+                        self.matou = True
 
-                    if tipo_coletavel:
-                        coletavel = Coletavel(inimigo.rect.x, inimigo.rect.y, tipo_coletavel)
-                        self.lista_coletaveis.append(coletavel)
+                        if num_aleatorio <= 40 and not self.já_evoluiu1:
+                            tipo_coletavel = 'canhao_melhor'
+                        elif 0 < num_aleatorio <= 0 and not self.já_evoluiu2 and not self.já_evoluiu1:
+                            tipo_coletavel = 'canhao'
+                        elif 40 < num_aleatorio <= 100:
+                            tipo_coletavel = 'moeda'
+                        elif 0 < num_aleatorio <= 0:
+                            tipo_coletavel = 'sucata'
+                        else:
+                            tipo_coletavel = None
+
+                        if tipo_coletavel:
+                            coletavel = Coletavel(inimigo.rect.x, inimigo.rect.y, tipo_coletavel)
+                            self.lista_coletaveis.append(coletavel)
 
             for objeto in self.lista_objetos[:]:
                 if pygame.sprite.collide_rect(laser, objeto):
@@ -230,6 +256,7 @@ class Jogo:
                 self.player.desenhar_vida()
 
                 if self.player.shoot:
+                    teclas = pygame.key.get_pressed()
                     tempo_atual = pygame.time.get_ticks()
                     if tempo_atual - self.ultimo_tiro >= 300:
                         self.player.shoot = False
@@ -243,6 +270,18 @@ class Jogo:
                             self.lista_lasers.append(laser_central)
                             self.lista_lasers.append(laser_esquerdo)
                             self.lista_lasers.append(laser_direito)
+                        elif self.player.level == 3:
+                            if teclas[pygame.K_SPACE]:
+                                laser_central = Laser(self.player.rect.midtop, -10, 0, 'bala_canhao')
+                                laser_esquerdo = Laser(self.player.rect.midtop, -10, -2, 'bala_canhao')
+                                laser_direito = Laser(self.player.rect.midtop, -10, 2, 'bala_canhao')
+                                self.lista_lasers.append(laser_central)
+                                self.lista_lasers.append(laser_esquerdo)
+                                self.lista_lasers.append(laser_direito)
+                            if  teclas[pygame.K_z] and self.contador_moedas > 2:
+                                self.tiro_eespecial = True
+                                self.tiro_especial = Laser(self.player.rect.midtop, -8, 0, 'bala_canhao')
+                                self.lista_lasers.append(self.tiro_especial)
 
                         self.ultimo_tiro = tempo_atual
 
