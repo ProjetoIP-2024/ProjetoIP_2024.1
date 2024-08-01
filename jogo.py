@@ -72,7 +72,7 @@ class Jogo:
         for laser in self.lista_lasers[:]:
             laser.update()
             print(self.lista_lasers)
-            if self.tiro_eespecial: #ainda nao entra na condicional
+            if self.tiro_eespecial: #mudar para uma lista propria para o tiro especial
                 print('verificou o tiro especial')
                 print(self.inimigos)
                 for inimigo in self.inimigos[:]:
