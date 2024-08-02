@@ -5,6 +5,7 @@ from player import Player
 from obstaculos import Objeto
 from laser import Laser
 from coletavel import Coletavel
+from boss import Boss
 from random import randint
 
 class Jogo:
@@ -38,10 +39,11 @@ class Jogo:
         self.inimigo_principal = Inimigos(0, 0, self.tela, self.velocidade_inimigo, self.imagem_inimigo)
         self.inimigos.append(self.inimigo_principal)
         self.fase = 'fase_1'
-        self.inimigos_por_nivel = 19
-        self.inimigos_vivos = 20
+        self.inimigos_por_nivel = 0 #19
+        self.inimigos_vivos = 1
         self.intervalo_tempo = 2000
         self.velocidade_tiro_inimigo = 8
+        self.boss = Boss(0,0)
 
     def desenhar_menu(self, mensagem):
         self.tela.fill((0, 0, 0))
@@ -93,6 +95,10 @@ class Jogo:
                     if tipo_coletavel:
                         coletavel = Coletavel(inimigo.rect.x, inimigo.rect.y, tipo_coletavel)
                         self.lista_coletaveis.append(coletavel)
+            
+            if pygame.sprite.collide_rect(laser, self.boss):
+                self.boss.receber_dano(1)
+                self.lista_lasers.remove(laser)
 
             for objeto in self.lista_objetos[:]:
                 if pygame.sprite.collide_rect(laser, objeto):
@@ -113,19 +119,27 @@ class Jogo:
                     if self.fase == 'fase_1':
                         self.fase = 'fase_2'
                         self.velocidade_inimigo = 40
-                        self.inimigos_por_nivel = 40
-                        self.inimigos_vivos = 40
+                        self.inimigos_por_nivel = 1 #40
+                        self.inimigos_vivos = 1 #40
                         self.intervalo_tempo = 1200
                         self.velocidade_tiro_inimigo = 12
                         self.imagem_inimigo = 'shark(1)'
                     elif self.fase == 'fase_2':
                         self.fase = 'fase_3'
                         self.velocidade_inimigo = 55
-                        self.inimigos_por_nivel = 50
-                        self.inimigos_vivos = 50
+                        self.inimigos_por_nivel = 1 #50
+                        self.inimigos_vivos = 1 #50
                         self.intervalo_tempo = 800
                         self.velocidade_tiro_inimigo = 18
                         self.imagem_inimigo = 'lula'
+                    elif self.fase == 'fase_3':
+                        self.fase = 'boss'
+                        self.velocidade_inimigo = 55
+                        self.inimigos_por_nivel = 0
+                        self.inimigos_vivos = 0
+                        self.intervalo_tempo = 1200
+                        self.velocidade_tiro_inimigo = 18
+
 
         if tempo_atual - self.ultimo_tempo >= 1200:
             objeto = Objeto(-230, 650, self.tela)
@@ -170,9 +184,7 @@ class Jogo:
 
     def executar(self):
         while True:
-            print(self.fase)
-            print(self.inimigos_vivos)
-            print(self.inimigos_por_nivel)
+            print(self.boss.vida)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -288,6 +300,25 @@ class Jogo:
                 for inimigo in self.inimigos:
                     if pygame.sprite.collide_rect(inimigo, self.player):
                         self.jogo = False
+
+                if self.fase == 'boss':
+                    self.boss.desenhar_boss(self.tela)
+                    self.boss.movimento(self.largura_tela )
+                    self.boss.atirar()
+
+                    if self.boss.shoot:
+                        laser_central = Laser(self.boss.rect.center, 10, 0, 'fogo')
+                        laser_esquerdo = Laser(self.boss.rect.center, 10, -2, 'fogo')
+                        laser_direito = Laser(self.boss.rect.center, 10, 2, 'fogo')
+                        self.lista_lasers_inimigo.append(laser_central)
+                        self.lista_lasers_inimigo.append(laser_esquerdo)
+                        self.lista_lasers_inimigo.append(laser_direito)
+
+                    if self.boss.inimigo:
+                        novo_inimigo = self.inimigo_principal.gerar_novo_inimigo(self.velocidade_inimigo, self.imagem_inimigo)
+                        self.inimigos.append(novo_inimigo)                   
+
+                self.boss.shoot = False
 
                 pygame.display.flip()
                 self.fps.tick(60)
