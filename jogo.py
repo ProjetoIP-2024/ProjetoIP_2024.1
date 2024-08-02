@@ -19,6 +19,8 @@ class Jogo:
         self.fps = pygame.time.Clock()
         self.inimigos = []
         self.lista_lasers = []
+        self.lista_tiro_especial = []
+        self.explosoes = pygame.sprite.Group()
         self.lista_lasers_inimigo = []
         self.lista_objetos = []
         self.lista_coletaveis = []
@@ -71,58 +73,61 @@ class Jogo:
     def checar_colisoes(self):
         for laser in self.lista_lasers[:]:
             laser.update()
-            print(self.lista_lasers)
-            if self.tiro_eespecial: #mudar para uma lista propria para o tiro especial
-                print('verificou o tiro especial')
-                print(self.inimigos)
-                for inimigo in self.inimigos[:]:
-                    if pygame.sprite.collide_rect(laser, inimigo):
-                        print('colidiu o tiro especial')
-                        laser = Explosao('bala_canhao')
-                        if laser == Explosao('bala_canhao'):
-                            print('o tiro explodiu')
-                        for inimigo in self.inimigos[:]:
-                            if pygame.sprite.collide_rect(laser, inimigo):
-                                self.inimigos.remove(inimigo)
-                                self.lista_lasers.remove(laser)
-                                self.inimigos_vivos -= 1
-                                self.contador_inimigos_mortos += 1
-                                tipo_coletavel = None
-                self.matou = True
-                self.tiro_eespecial = False
-                    
-                self.contador_moedas -= 2
+            for inimigo in self.inimigos[:]:
+                if pygame.sprite.collide_rect(laser, inimigo):
+                    self.inimigos.remove(inimigo)
+                    self.lista_lasers.remove(laser)
+                    self.inimigos_vivos -=1
+                    self.contador_inimigos_mortos += 1  # Incrementar contador
 
-            else:
-                print('deu muito errado')
-                for inimigo in self.inimigos[:]:
-                    if pygame.sprite.collide_rect(laser, inimigo):
-                        self.inimigos.remove(inimigo)
-                        self.lista_lasers.remove(laser)
-                        self.inimigos_vivos -=1
-                        self.contador_inimigos_mortos += 1  # Incrementar contador
+                    num_aleatorio = randint(1, 100)
+                    self.matou = True
 
-                        num_aleatorio = randint(1, 100)
-                        self.matou = True
+                    if num_aleatorio <= 40 and not self.já_evoluiu1:
+                        tipo_coletavel = 'canhao_melhor'
+                    elif 0 < num_aleatorio <= 0 and not self.já_evoluiu2 and not self.já_evoluiu1:
+                        tipo_coletavel = 'canhao'
+                    elif 40 < num_aleatorio <= 100:
+                        tipo_coletavel = 'moeda'
+                    elif 0 < num_aleatorio <= 0:
+                        tipo_coletavel = 'sucata'
+                    else:
+                        tipo_coletavel = None
 
-                        if num_aleatorio <= 40 and not self.já_evoluiu1:
-                            tipo_coletavel = 'canhao_melhor'
-                        elif 0 < num_aleatorio <= 0 and not self.já_evoluiu2 and not self.já_evoluiu1:
-                            tipo_coletavel = 'canhao'
-                        elif 40 < num_aleatorio <= 100:
-                            tipo_coletavel = 'moeda'
-                        elif 0 < num_aleatorio <= 0:
-                            tipo_coletavel = 'sucata'
-                        else:
-                            tipo_coletavel = None
-
-                        if tipo_coletavel:
-                            coletavel = Coletavel(inimigo.rect.x, inimigo.rect.y, tipo_coletavel)
-                            self.lista_coletaveis.append(coletavel)
+                    if tipo_coletavel:
+                        coletavel = Coletavel(inimigo.rect.x, inimigo.rect.y, tipo_coletavel)
+                        self.lista_coletaveis.append(coletavel)
 
             for objeto in self.lista_objetos[:]:
                 if pygame.sprite.collide_rect(laser, objeto):
                     self.lista_lasers.remove(laser)
+        
+        if len(self.lista_tiro_especial) != 0:
+            for laser in self.lista_tiro_especial[:]:
+                laser.update()
+            for inimigo in self.inimigos[:]:
+                if pygame.sprite.collide_rect(laser, inimigo):
+                    explosao = Explosao(laser.rect.center)  
+                    self.inimigos_pegos_na_explosao = pygame.sprite.Group()
+                    self.inimigos_pegos_na_explosao.add(inimigo)
+                    self.inimigos.remove(inimigo)
+                    self.lista_tiro_especial.remove(laser)
+                    self.explosoes.add(explosao)
+                    self.inimigos_vivos -=1
+                    self.contador_inimigos_mortos += 1  # Incrementar contador
+                    self.matou = True
+                    
+            for explosao in self.explosoes:
+                acertou_inimigo = pygame.sprite.spritecollide(explosao, self.inimigos_pegos_na_explosao, True)
+                explosao.update()
+                if acertou_inimigo:
+                    for inimigo in acertou_inimigo:
+                        self.inimigos_vivos -= 1
+                        self.contador_inimigos_mortos += 1
+                        
+                
+        print(self.lista_tiro_especial)
+        print(self.explosoes)
 
 
     def atualizar_jogo(self):
@@ -281,11 +286,13 @@ class Jogo:
                             if  teclas[pygame.K_z] and self.contador_moedas > 2:
                                 self.tiro_eespecial = True
                                 self.tiro_especial = Laser(self.player.rect.midtop, -8, 0, 'bala_canhao')
-                                self.lista_lasers.append(self.tiro_especial)
+                                self.lista_tiro_especial.append(self.tiro_especial)
+                                self.contador_moedas -= 2
 
                         self.ultimo_tiro = tempo_atual
 
                 self.checar_colisoes()
+                self.explosoes.draw(self.tela)
 
                 for inimigo in self.inimigos[:]:
                     inimigo.mover()
