@@ -40,7 +40,7 @@ class Jogo:
         self.inimigos.append(self.inimigo_principal)
         self.fase = 'fase_1'
         self.inimigos_por_nivel = 19
-        self.inimigos_vivos = 1
+        self.inimigos_vivos = 20
         self.intervalo_tempo = 2000
         self.velocidade_tiro_inimigo = 8
         self.boss = Boss(0,0)
