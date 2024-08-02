@@ -39,7 +39,7 @@ class Jogo:
         self.inimigo_principal = Inimigos(0, 0, self.tela, self.velocidade_inimigo, self.imagem_inimigo)
         self.inimigos.append(self.inimigo_principal)
         self.fase = 'fase_1'
-        self.inimigos_por_nivel = 0 #19
+        self.inimigos_por_nivel = 19
         self.inimigos_vivos = 1
         self.intervalo_tempo = 2000
         self.velocidade_tiro_inimigo = 8
@@ -119,16 +119,16 @@ class Jogo:
                     if self.fase == 'fase_1':
                         self.fase = 'fase_2'
                         self.velocidade_inimigo = 40
-                        self.inimigos_por_nivel = 1 #40
-                        self.inimigos_vivos = 1 #40
+                        self.inimigos_por_nivel = 40
+                        self.inimigos_vivos = 40
                         self.intervalo_tempo = 1200
                         self.velocidade_tiro_inimigo = 12
                         self.imagem_inimigo = 'shark(1)'
                     elif self.fase == 'fase_2':
                         self.fase = 'fase_3'
                         self.velocidade_inimigo = 55
-                        self.inimigos_por_nivel = 1 #50
-                        self.inimigos_vivos = 1 #50
+                        self.inimigos_por_nivel = 50
+                        self.inimigos_vivos = 50
                         self.intervalo_tempo = 800
                         self.velocidade_tiro_inimigo = 18
                         self.imagem_inimigo = 'lula'
