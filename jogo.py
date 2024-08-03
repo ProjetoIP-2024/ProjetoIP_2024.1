@@ -209,6 +209,8 @@ class Jogo:
                             self.ultimo_tiro = 0
                             self.ultimo_tiro_inimigo = 0
                         elif not self.jogo:
+                            self.jogo = True
+                            self.menu = False
                             self.largura_tela = 1920
                             self.altura_tela = 1080
                             self.tela = pygame.display.set_mode((self.largura_tela, self.altura_tela))
@@ -222,8 +224,6 @@ class Jogo:
                             self.contador_moedas = 0
                             self.contador_sucata = 0
                             self.contador_inimigos_mortos = 0  # Novo contador
-                            self.jogo = False
-                            self.menu = True
                             self.vitoria = False
                             self.tempo_ultimo_inimigo = pygame.time.get_ticks()
                             self.ultimo_tempo = pygame.time.get_ticks()
@@ -242,6 +242,7 @@ class Jogo:
                             self.intervalo_tempo = 2000
                             self.velocidade_tiro_inimigo = 8
                             self.boss = Boss(0,0)
+
 
             if self.menu:
                 self.desenhar_menu("BEM VINDO! APERTE ENTER PARA COMEÇAR")
