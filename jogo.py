@@ -27,6 +27,7 @@ class Jogo:
         self.contador_inimigos_mortos = 0  # Novo contador
         self.jogo = False
         self.menu = True
+        self.vitoria = False
         self.tempo_ultimo_inimigo = pygame.time.get_ticks()
         self.ultimo_tempo = pygame.time.get_ticks()
         self.ultimo_tiro = 0
@@ -95,10 +96,6 @@ class Jogo:
                     if tipo_coletavel:
                         coletavel = Coletavel(inimigo.rect.x, inimigo.rect.y, tipo_coletavel)
                         self.lista_coletaveis.append(coletavel)
-            
-            if pygame.sprite.collide_rect(laser, self.boss):
-                self.boss.receber_dano(1)
-                self.lista_lasers.remove(laser)
 
             for objeto in self.lista_objetos[:]:
                 if pygame.sprite.collide_rect(laser, objeto):
@@ -302,9 +299,10 @@ class Jogo:
                         self.jogo = False
 
                 if self.fase == 'boss':
-                    self.boss.desenhar_boss(self.tela)
-                    self.boss.movimento(self.largura_tela )
-                    self.boss.atirar()
+                    if self.jogo:
+                        self.boss.desenhar_boss(self.tela)
+                        self.boss.movimento(self.largura_tela )
+                        self.boss.atirar()
 
                     if self.boss.shoot:
                         laser_central = Laser(self.boss.rect.center, 10, 0, 'fogo')
@@ -316,13 +314,24 @@ class Jogo:
 
                     if self.boss.inimigo:
                         novo_inimigo = self.inimigo_principal.gerar_novo_inimigo(self.velocidade_inimigo, self.imagem_inimigo)
-                        self.inimigos.append(novo_inimigo)                   
+                        self.inimigos.append(novo_inimigo)     
+
+                    
+                    if self.boss.receber_dano(0):
+                        self.vitoria = True
+
+                    for laser in self.lista_lasers[:]:
+                        if pygame.sprite.collide_rect(laser, self.boss):
+                            self.boss.receber_dano(1)
+                            self.lista_lasers.remove(laser)
 
                 self.boss.shoot = False
-
                 pygame.display.flip()
                 self.fps.tick(60)
 
+            elif self.vitoria:
+                self.jogo = False
+                self.desenhar_menu('VITORIA')
             elif not self.jogo:
                 self.desenhar_menu('VOCÊ PERDEU! APERTE ENTER PARA REINICIAR OU ESC PARA FECHAR')
 
