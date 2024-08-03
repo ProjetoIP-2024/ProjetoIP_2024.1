@@ -24,6 +24,7 @@ class Jogo:
         self.lista_coletaveis = []
         self.contador_moedas = 0
         self.contador_sucata = 0
+        self.contador_rum = 0
         self.contador_inimigos_mortos = 0  # Novo contador
         self.jogo = False
         self.menu = True
@@ -58,6 +59,7 @@ class Jogo:
         texto_vida = fonte.render(f"Vida: {self.player.vida}", True, (255, 0, 0))
         texto_moeda = fonte.render(f"Moedas: {self.contador_moedas}", True, (255, 255, 0))
         texto_sucata = fonte.render(f"Sucata: {self.contador_sucata}", True, (128, 128, 128))
+        texto_rum = fonte.render(f"Rum: {self.contador_rum}", True, (0, 255, 0))
         texto_inimigos_mortos = fonte.render(f"Inimigos Mortos: {self.contador_inimigos_mortos}", True, (255, 255, 255))
         fase = fonte.render(f"{self.fase}", True, (255, 255, 255))
 
@@ -65,8 +67,9 @@ class Jogo:
         self.tela.blit(texto_vida, (10, 10))
         self.tela.blit(texto_moeda, (10, 50))
         self.tela.blit(texto_sucata, (10, 90))
-        self.tela.blit(texto_inimigos_mortos, (10, 130))  # Novo contador
-        self.tela.blit(fase, (10, 170))  # Novo contador
+        self.tela.blit(texto_rum, (10, 130))
+        self.tela.blit(texto_inimigos_mortos, (10, 170))  # Novo contador
+        self.tela.blit(fase, (10, 210))  # Novo contador
 
 
     def checar_colisoes(self):
@@ -87,10 +90,12 @@ class Jogo:
                         tipo_coletavel = 'canhao_melhor'
                     elif 1 < num_aleatorio <= 5 and not self.já_evoluiu2 and not self.já_evoluiu1:
                         tipo_coletavel = 'canhao'
-                    elif 5 < num_aleatorio <= 50:
+                    elif 5 < num_aleatorio <= 75:
                         tipo_coletavel = 'moeda'
-                    elif 50 < num_aleatorio <= 100:
+                    elif 75 < num_aleatorio <= 90:
                         tipo_coletavel = 'sucata'
+                    elif 90 < num_aleatorio <= 100:
+                        tipo_coletavel = 'rum'
                     else:
                         tipo_coletavel = None
 
@@ -178,6 +183,10 @@ class Jogo:
                     print("Sucata coletada")
                     self.contador_sucata += 1
                     self.player.receber_dano(1)
+                elif coletavel.tipo == 'rum':
+                    print('Rum coletado')
+                    self.contador_rum += 1
+                    self.player.velocidade += 0.25
                 self.lista_coletaveis.remove(coletavel)
 
     def executar(self):
@@ -204,6 +213,7 @@ class Jogo:
                             self.lista_coletaveis = []
                             self.contador_moedas = 0
                             self.contador_sucata = 0
+                            self.contador_rum = 0
                             self.tempo_ultimo_inimigo = pygame.time.get_ticks()
                             self.ultimo_tempo = pygame.time.get_ticks()
                             self.ultimo_tiro = 0
@@ -223,6 +233,7 @@ class Jogo:
                             self.lista_coletaveis = []
                             self.contador_moedas = 0
                             self.contador_sucata = 0
+                            self.contador_rum = 0
                             self.contador_inimigos_mortos = 0  # Novo contador
                             self.vitoria = False
                             self.tempo_ultimo_inimigo = pygame.time.get_ticks()
