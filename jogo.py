@@ -74,10 +74,11 @@ class Jogo:
             laser.update()
             for inimigo in self.inimigos[:]:
                 if pygame.sprite.collide_rect(laser, inimigo):
-                    self.inimigos.remove(inimigo)
-                    self.lista_lasers.remove(laser)
-                    self.inimigos_vivos -=1
-                    self.contador_inimigos_mortos += 1  # Incrementar contador
+                    if laser in self.lista_lasers:
+                        self.inimigos.remove(inimigo)
+                        self.lista_lasers.remove(laser)
+                        self.inimigos_vivos -=1
+                        self.contador_inimigos_mortos += 1  # Incrementar contador
 
                     num_aleatorio = randint(1, 100)
                     self.matou = True
@@ -181,6 +182,7 @@ class Jogo:
 
     def executar(self):
         while True:
+            print(self.vitoria)
             print(self.boss.vida)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -207,8 +209,10 @@ class Jogo:
                             self.ultimo_tiro = 0
                             self.ultimo_tiro_inimigo = 0
                         elif not self.jogo:
-                            self.jogo = True
-                            self.menu = False
+                            self.largura_tela = 1920
+                            self.altura_tela = 1080
+                            self.tela = pygame.display.set_mode((self.largura_tela, self.altura_tela))
+                            self.fps = pygame.time.Clock()
                             self.velocidade_inimigo = 20
                             self.inimigos = []
                             self.lista_lasers = []
@@ -218,6 +222,9 @@ class Jogo:
                             self.contador_moedas = 0
                             self.contador_sucata = 0
                             self.contador_inimigos_mortos = 0  # Novo contador
+                            self.jogo = False
+                            self.menu = True
+                            self.vitoria = False
                             self.tempo_ultimo_inimigo = pygame.time.get_ticks()
                             self.ultimo_tempo = pygame.time.get_ticks()
                             self.ultimo_tiro = 0
@@ -234,6 +241,7 @@ class Jogo:
                             self.inimigos_vivos = 20
                             self.intervalo_tempo = 2000
                             self.velocidade_tiro_inimigo = 8
+                            self.boss = Boss(0,0)
 
             if self.menu:
                 self.desenhar_menu("BEM VINDO! APERTE ENTER PARA COMEÇAR")
