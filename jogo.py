@@ -391,6 +391,22 @@ class Jogo:
                             self.boss.receber_dano(1)
                             self.lista_lasers.remove(laser)
                     
+                    if pygame.sprite.collide_rect(laser, self.boss):
+                        print('entrou2')
+                        explosao = Explosao(laser.rect.center)  
+                        self.lista_tiro_especial.remove(laser)
+                        self.explosoes.append(explosao)
+                        self.boss.receber_dano(1)
+                    
+                        for explosao in self.explosoes[:]:
+                            explosao.update()
+                            self.tela.blit(explosao.image, explosao.rect)
+                            if explosao.update():
+                                self.explosoes.remove(explosao)
+                            for inimigo in self.inimigos[:]:
+                                if pygame.sprite.collide_rect(explosao, inimigo):
+                                    self.boss.receber_dano(4)
+                    
                 for tiro in self.lista_tiro_especial:
                     self.tela.blit(tiro.sprite, tiro.rect)
 
