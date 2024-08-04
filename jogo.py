@@ -89,14 +89,19 @@ class Jogo:
 
                     num_aleatorio = randint(1, 100)
                     self.matou = True
+                    print(num_aleatorio)
 
-                    if 1 <= num_aleatorio <= 3 and not self.já_evoluiu1:
+                    if 1 <= num_aleatorio <= 3 and not self.já_evoluiu1 and self.já_evoluiu2:
                         tipo_coletavel = 'canhao_melhor'
+                    elif 1 <= num_aleatorio <= 3 and not self.já_evoluiu2 and not self.já_evoluiu1:
+                        tipo_coletavel = 'moeda'
                     elif 3 < num_aleatorio <= 7 and not self.já_evoluiu2 and not self.já_evoluiu1:
                         tipo_coletavel = 'canhao'
-                    elif 7 < num_aleatorio <= 77:
+                    elif 3 < num_aleatorio <= 7 and self.já_evoluiu2:
                         tipo_coletavel = 'moeda'
-                    elif 77 < num_aleatorio <= 92:
+                    elif 7 < num_aleatorio <= 57:
+                        tipo_coletavel = 'moeda'
+                    elif 57 < num_aleatorio <= 92:
                         tipo_coletavel = 'sucata'
                     elif 92 < num_aleatorio <= 100:
                         tipo_coletavel = 'rum'
@@ -111,12 +116,10 @@ class Jogo:
                 if pygame.sprite.collide_rect(laser, objeto):
                     self.lista_lasers.remove(laser)
         if len(self.lista_tiro_especial) != 0:
-            print('entrou1')
             for laser in self.lista_tiro_especial[:]:
                 laser.update()
                 for inimigo in self.inimigos[:]:
                     if pygame.sprite.collide_rect(laser, inimigo):
-                        print('entrou2')
                         explosao = Explosao(laser.rect.center)  
                         self.inimigos.remove(inimigo)
                         self.lista_tiro_especial.remove(laser)
@@ -201,7 +204,7 @@ class Jogo:
                     self.player.evolucao_canhao_melhor(self.player.canhao_melhor)
                     self.player.level_up_3()
                 elif coletavel.tipo == 'canhao':
-                    self.player.canhao = True
+                    self.player.canhao = True 
                     self.player.evolucao_canhao(self.player.canhao)
                     self.já_evoluiu2 = True
                     self.player.level_up_2()
@@ -220,8 +223,6 @@ class Jogo:
 
     def executar(self):
         while True:
-            print(self.vitoria)
-            print(self.boss.vida)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -391,11 +392,9 @@ class Jogo:
                             self.lista_lasers.remove(laser)
                     
                     if len(self.lista_tiro_especial) != 0:
-                        print('entrou1')
                         for laser in self.lista_tiro_especial[:]:
                             laser.update()
                             if pygame.sprite.collide_rect(laser, self.boss):
-                                print('entrou2')
                                 explosao = Explosao(laser.rect.center)  
                                 self.lista_tiro_especial.remove(laser)
                                 self.explosoes.append(explosao)
@@ -417,7 +416,6 @@ class Jogo:
                         if pygame.sprite.collide_rect(tiro, obstaculo):
                             self.lista_tiro_especial.remove(tiro)
 
-                print(self.lista_tiro_especial)
 
                 self.boss.shoot = False
                 pygame.display.flip()
