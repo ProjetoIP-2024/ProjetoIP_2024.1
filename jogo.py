@@ -6,6 +6,7 @@ from obstaculos import Objeto
 from laser import Laser
 from coletavel import Coletavel
 from boss import Boss
+from explosao import Explosao
 from random import randint
 
 class Jogo:
@@ -22,6 +23,8 @@ class Jogo:
         self.lista_lasers_inimigo = []
         self.lista_objetos = []
         self.lista_coletaveis = []
+        self.lista_tiro_especial = []
+        self.explosoes = []
         self.contador_moedas = 0
         self.contador_sucata = 0
         self.contador_rum = 0
@@ -46,6 +49,7 @@ class Jogo:
         self.intervalo_tempo = 2000
         self.velocidade_tiro_inimigo = 8
         self.boss = Boss(0,0)
+        self.tiro_eespecial = False
 
     def desenhar_menu(self, mensagem):
         self.tela.fill((0, 0, 0))
@@ -106,6 +110,31 @@ class Jogo:
             for objeto in self.lista_objetos[:]:
                 if pygame.sprite.collide_rect(laser, objeto):
                     self.lista_lasers.remove(laser)
+        if len(self.lista_tiro_especial) != 0:
+            print('entrou1')
+            for laser in self.lista_tiro_especial[:]:
+                laser.update()
+                for inimigo in self.inimigos[:]:
+                    if pygame.sprite.collide_rect(laser, inimigo):
+                        print('entrou2')
+                        explosao = Explosao(laser.rect.center)  
+                        self.inimigos.remove(inimigo)
+                        self.lista_tiro_especial.remove(laser)
+                        self.explosoes.append(explosao)
+                        self.inimigos_vivos -=1
+                        self.contador_inimigos_mortos += 1  # Incrementar contador
+                        self.matou = True
+                    
+                        for explosao in self.explosoes[:]:
+                            explosao.update()
+                            self.tela.blit(explosao.image, explosao.rect)
+                            if explosao.update():
+                                self.explosoes.remove(explosao)
+                            for inimigo in self.inimigos[:]:
+                                if pygame.sprite.collide_rect(explosao, inimigo):
+                                        self.inimigos.remove(inimigo)
+                                        self.inimigos_vivos -= 1
+                                        self.contador_inimigos_mortos += 1
 
 
     def atualizar_jogo(self):
@@ -253,6 +282,9 @@ class Jogo:
                             self.intervalo_tempo = 2000
                             self.velocidade_tiro_inimigo = 8
                             self.boss = Boss(0,0)
+                            self.tiro_eespecial = False
+                            self.lista_tiro_especial = []
+                            self.explosoes = []
 
 
             if self.menu:
@@ -265,6 +297,7 @@ class Jogo:
                 self.player.desenhar_vida()
 
                 if self.player.shoot:
+                    teclas = pygame.key.get_pressed()
                     tempo_atual = pygame.time.get_ticks()
                     if tempo_atual - self.ultimo_tiro >= 300:
                         self.player.shoot = False
@@ -278,6 +311,19 @@ class Jogo:
                             self.lista_lasers.append(laser_central)
                             self.lista_lasers.append(laser_esquerdo)
                             self.lista_lasers.append(laser_direito)
+                        elif self.player.level == 3:
+                            if teclas[pygame.K_SPACE]:
+                                laser_central = Laser(self.player.rect.midtop, -10, 0, 'bala_canhao')
+                                laser_esquerdo = Laser(self.player.rect.midtop, -10, -2, 'bala_canhao')
+                                laser_direito = Laser(self.player.rect.midtop, -10, 2, 'bala_canhao')
+                                self.lista_lasers.append(laser_central)
+                                self.lista_lasers.append(laser_esquerdo)
+                                self.lista_lasers.append(laser_direito)
+                            if  teclas[pygame.K_z] and self.contador_moedas >= 2:
+                                self.tiro_eespecial = True
+                                self.tiro_especial = Laser(self.player.rect.midtop, -8, 0, 'bala_canhao')
+                                self.lista_tiro_especial.append(self.tiro_especial)
+                                self.contador_moedas -= 2
 
                         self.ultimo_tiro = tempo_atual
 
@@ -344,6 +390,11 @@ class Jogo:
                         if pygame.sprite.collide_rect(laser, self.boss):
                             self.boss.receber_dano(1)
                             self.lista_lasers.remove(laser)
+                    
+                for tiro in self.lista_tiro_especial:
+                    self.tela.blit(tiro.sprite, tiro.rect)
+
+                print(self.lista_tiro_especial)
 
                 self.boss.shoot = False
                 pygame.display.flip()
