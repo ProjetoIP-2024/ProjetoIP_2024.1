@@ -321,7 +321,7 @@ class Jogo:
                                 self.lista_lasers.append(laser_direito)
                             if  teclas[pygame.K_z] and self.contador_moedas >= 2:
                                 self.tiro_eespecial = True
-                                self.tiro_especial = Laser(self.player.rect.midtop, -8, 0, 'bala_canhao')
+                                self.tiro_especial = Laser(self.player.rect.midtop, -8, 0, 'bomba')
                                 self.lista_tiro_especial.append(self.tiro_especial)
                                 self.contador_moedas -= 2
 
