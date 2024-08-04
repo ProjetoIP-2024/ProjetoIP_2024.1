@@ -413,6 +413,11 @@ class Jogo:
                 for tiro in self.lista_tiro_especial:
                     self.tela.blit(tiro.sprite, tiro.rect)
 
+                for tiro in self.lista_tiro_especial[:]:
+                    for obstaculo in self.lista_objetos:
+                        if pygame.sprite.collide_rect(tiro, obstaculo):
+                            self.lista_tiro_especial.remove(tiro)
+
                 print(self.lista_tiro_especial)
 
                 self.boss.shoot = False
