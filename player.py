@@ -32,6 +32,10 @@ class Player(pygame.sprite.Sprite):
             self.shoot = True #Indica que atirou.
             self.tiros() #Chama a função de atirar
             print(self.level) #Printa o nível.
+        if self.level == 3:
+            if teclas[pygame.K_z]:
+                self.shoot = True
+                self.tiros()
 
     def draw(self):
         self.tela.blit(self.sprite, self.rect) #Desenha o player na tela.
@@ -79,3 +83,12 @@ class Player(pygame.sprite.Sprite):
             laser_esquerdo = Laser(self.rect.midtop, -10, -2, 'bala_canhao') #Tiro que irá ser disparado pela esquerda.
             laser_direito = Laser(self.rect.midtop, -10, -2, 'bala_canhao') #Tiro que será disparado pela direita.
             self.lasers.add(laser_central, laser_esquerdo, laser_direito) #Adiciona os tiros.
+        elif self.level == 3:
+            teclas = pygame.key.get_pressed()
+            laser_central = Laser(self.rect.midtop, -10, 0, 'bala_canhao')
+            laser_esquerdo = Laser(self.rect.midtop, -10, -2, 'bala_canhao')
+            laser_direito = Laser(self.rect.midtop, -10, -2, 'bala_canhao')
+            self.lasers.add(laser_central, laser_esquerdo, laser_direito)
+            if teclas[pygame.K_z]:
+                tiro_especial = Laser(self.rect.midtop, -8, 0, 'bala_canhao')
+                self.lasers.add(tiro_especial)
