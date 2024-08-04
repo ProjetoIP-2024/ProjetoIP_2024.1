@@ -90,15 +90,15 @@ class Jogo:
                     num_aleatorio = randint(1, 100)
                     self.matou = True
 
-                    if num_aleatorio == 1 and not self.já_evoluiu1:
+                    if 1 <= num_aleatorio <= 3 and not self.já_evoluiu1:
                         tipo_coletavel = 'canhao_melhor'
-                    elif 1 < num_aleatorio <= 5 and not self.já_evoluiu2 and not self.já_evoluiu1:
+                    elif 3 < num_aleatorio <= 7 and not self.já_evoluiu2 and not self.já_evoluiu1:
                         tipo_coletavel = 'canhao'
-                    elif 5 < num_aleatorio <= 75:
+                    elif 7 < num_aleatorio <= 77:
                         tipo_coletavel = 'moeda'
-                    elif 75 < num_aleatorio <= 90:
+                    elif 77 < num_aleatorio <= 92:
                         tipo_coletavel = 'sucata'
-                    elif 90 < num_aleatorio <= 100:
+                    elif 92 < num_aleatorio <= 100:
                         tipo_coletavel = 'rum'
                     else:
                         tipo_coletavel = None
@@ -318,7 +318,7 @@ class Jogo:
                                 self.lista_lasers.append(laser_central)
                                 self.lista_lasers.append(laser_esquerdo)
                                 self.lista_lasers.append(laser_direito)
-                            if  teclas[pygame.K_z] and self.contador_moedas >= 2:
+                            if  teclas[pygame.K_z] and self.contador_moedas >= 12:
                                 self.tiro_eespecial = True
                                 self.tiro_especial = Laser(self.player.rect.midtop, -8, 0, 'bomba')
                                 self.lista_tiro_especial.append(self.tiro_especial)
