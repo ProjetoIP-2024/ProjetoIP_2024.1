@@ -252,7 +252,6 @@ class Jogo:
                             self.menu = False
                             self.largura_tela = 1920
                             self.altura_tela = 1080
-                            self.tela = pygame.display.set_mode((self.largura_tela, self.altura_tela))
                             self.fps = pygame.time.Clock()
                             self.velocidade_inimigo = 20
                             self.inimigos = []
