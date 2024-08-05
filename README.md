@@ -60,7 +60,7 @@ coletavel.py - É aqui que há a classe dos Itens Coletáveis, constituindo um d
 
 boss.py - Neste módulo, encontra-se a estrutura que constrói a Classe Boss, que é o inimigo final do jogo. Derrotando-o, o jogador vence o jogo.
 
-![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Print%20jogo%203.jpeg)
+![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Print%20jogo%202.jpeg)
 
 ## Desafios
 Durante o desenvolvimento de Sea Monsters, enfrentamos diversos desafios. Dentre eles, destacamos dois:
@@ -90,7 +90,7 @@ Programação Orientada a Objetos(POO) - A lógica do jogo foi inteiramente pens
 
 Módulos e Pacotes - Utilizamos tais mecanismos com o intuito de organizar melhor a estrutura do código, possibilitando uma melhor visualização das partes distintas que, juntas, formam o código principal. 
 
-![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Print%20jogo%202.jpeg)
+![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Print%20jogo%203.jpeg)
 
 ## O que foi aprendido
 Durante o projeto, o grupo pode aprender diversos novos conceitos e formas de programação. Iniciar um trabalho baseado em Programação Orientada à Objetos, mas sem conhecimentos prévios sobre, foi algo que motivou o grupo à adquirir conhecimentos novos sobre tal área. Além disso, é notório que o grupo pode desenvolver uma visão mais evoluída em relação ao funcionamento de Classes e, principalmente, Funções, utilizadas em todo o código. 	
