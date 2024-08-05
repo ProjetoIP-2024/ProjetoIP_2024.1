@@ -1,4 +1,6 @@
 ## Sea Monsters
+
+![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Print%20jogo%203.jpeg)
 ## Descrição do jogo
 Sea Monsters é um jogo inspirado no clássico Space Invaders, mas com uma temática diferente: o jogador controla um navio que deve, assim como no jogo clássico, matar inimigos(monstros do mar), tentando sobreviver. Simulando um ambiente marítimo, na perspectiva 2D e com um tamanho de tela igual à 1920x1080, Sea Monsters foi desenvolvido como trabalho final da disciplina de Introdução à Computação, da Universidade Federal de Pernambuco(UFPE).
 
@@ -57,6 +59,8 @@ coletavel.py - É aqui que há a classe dos Itens Coletáveis, constituindo um d
 
 boss.py - Neste módulo, encontra-se a estrutura que constrói a Classe Boss, que é o inimigo final do jogo. Derrotando-o, o jogador vence o jogo.
 
+![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Print%20jogo%203.jpeg)
+
 ## Desafios
 Durante o desenvolvimento de Sea Monsters, enfrentamos diversos desafios. Dentre eles, destacamos dois:
 	Comunicação entre o grupo: Como decidimos trabalhar remotamente, cada um com seu computador e à distância, muitas vezes estivemos em situações em que houve falta de comunicação – um integrante não estava disponível para discutir assuntos relacionados ao projeto – e uma certa descoordenação entre o grupo, já que os códigos, mesmo que com as mesmas diretrizes e lógica, diferiam em alguns aspectos, dificultando o andamento do trabalho.
@@ -84,6 +88,8 @@ Tuplas - Tuplas foram utilizadas na passagem de parâmetros para as funções se
 Programação Orientada a Objetos(POO) - A lógica do jogo foi inteiramente pensada com base nos conhecimentos adquiridos no estudo de POO. Com esse modelo de programação, foi possível desenvolver tudo o que foi escrito durante o desenvolvimento do projeto, constituindo a base de tudo o que há presente em Sea Monsters.
 
 Módulos e Pacotes - Utilizamos tais mecanismos com o intuito de organizar melhor a estrutura do código, possibilitando uma melhor visualização das partes distintas que, juntas, formam o código principal. 
+
+![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Print%20jogo%202.jpeg)
 
 ## O que foi aprendido
 Durante o projeto, o grupo pode aprender diversos novos conceitos e formas de programação. Iniciar um trabalho baseado em Programação Orientada à Objetos, mas sem conhecimentos prévios sobre, foi algo que motivou o grupo à adquirir conhecimentos novos sobre tal área. Além disso, é notório que o grupo pode desenvolver uma visão mais evoluída em relação ao funcionamento de Classes e, principalmente, Funções, utilizadas em todo o código. 	
