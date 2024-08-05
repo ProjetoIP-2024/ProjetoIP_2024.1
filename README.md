@@ -1,6 +1,7 @@
 ## Sea Monsters
 
-![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Print%20jogo%203.jpeg)
+![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Vit%C3%B3ria.jpeg)
+
 ## Descrição do jogo
 Sea Monsters é um jogo inspirado no clássico Space Invaders, mas com uma temática diferente: o jogador controla um navio que deve, assim como no jogo clássico, matar inimigos(monstros do mar), tentando sobreviver. Simulando um ambiente marítimo, na perspectiva 2D e com um tamanho de tela igual à 1920x1080, Sea Monsters foi desenvolvido como trabalho final da disciplina de Introdução à Computação, da Universidade Federal de Pernambuco(UFPE).
 
@@ -99,6 +100,8 @@ Ademais, saindo do mundo computacional, é possível afirmar que cada integrante
 a) Python 3.x;
 
 b) Biblioteca Pygame(é possível instalar utilizando o comando, no terminal, pip install pygame).
+
+![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Vit%C3%B3ria.jpeg)
 
 ## Bibliografia
 Building Space Invaders Using Pygame - Python : GeeksforGeeks. (2022, December 6). Building space invaders using pygame - python. https://www.geeksforgeeks.org/building-space-invaders-using-pygame-python/ 
