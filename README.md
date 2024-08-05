@@ -13,7 +13,7 @@ Manoel Villarim - Responsável pela estrutura base do jogo, assim como o funcion
 
 Ronaldo Felipe - Responsável pela organização das sprites utilizadas no decorrer do código e desenvolvimento dos obstáculos, além de introduzir efeitos sonoros ao jogo.
 
-Thiago Moraes - Ajudou na programação e lógica do menu do jogo, bem como contribuiu para a implementação dos efeitos sonoros.
+Thiago Moraes - Ajudou na programação e lógica do menu do jogo, bem como contribuiu para a implementação das sprites e dos efeitos sonoros utilizados.
 
 ## Funcionamento do jogo
   Em Sea Monsters, o jogador controla um navio, com o desafio de eliminar os monstros que aparecem pelo caminho para, enfim, derrotar o boss que o espera no final. Para realizar isso, o player dispõe de um canhão, que pode ser melhorado durante o jogo.
