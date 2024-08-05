@@ -37,7 +37,6 @@ class Boss:
 
         self.vida -= dano
         if self.vida <= 0:
-            self.morrer()
             return True
 
     def morrer(self):
