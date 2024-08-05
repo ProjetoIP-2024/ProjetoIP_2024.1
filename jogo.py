@@ -319,11 +319,11 @@ class Jogo:
                                 self.lista_lasers.append(laser_central)
                                 self.lista_lasers.append(laser_esquerdo)
                                 self.lista_lasers.append(laser_direito)
-                            if  teclas[pygame.K_z] and self.contador_moedas >= 20:
+                            if  teclas[pygame.K_z] and self.contador_moedas >= 12:
                                 self.tiro_eespecial = True
                                 self.tiro_especial = Laser(self.player.rect.midtop, -8, 0, 'bomba')
                                 self.lista_tiro_especial.append(self.tiro_especial)
-                                self.contador_moedas -= 2
+                                self.contador_moedas -= 12
 
                         self.ultimo_tiro = tempo_atual
 
