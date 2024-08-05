@@ -42,9 +42,7 @@ class Player(pygame.sprite.Sprite):
         self.desenhar_vida() #Chama a função que desenha as vidas do player na tela.
 
     def desenhar_vida(self):
-        fonte = pygame.font.SysFont(None, 36) #Fonte utilizada no texto da vida.
-        vida_texto = fonte.render(f'Vida: {self.vida}', True, (255, 0, 0)) #Texto a ser escrito.
-        self.tela.blit(vida_texto, (10, 10)) #Desenha o texto na tela.
+        pass
 
     def receber_dano(self, dano):
         self.vida -= dano #Se tomou dano, reduz a vida em 1 unidade.
