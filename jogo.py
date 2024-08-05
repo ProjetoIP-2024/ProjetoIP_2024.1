@@ -40,6 +40,11 @@ class Jogo:
         self.já_evoluiu1 = False
         self.já_evoluiu2 = False
         self.imagem_inimigo = 'inimigo'
+        self.imagem_moedas = pygame.transform.scale(pygame.image.load('./imagens/moeda.png'), (50,50)).convert_alpha()
+        self.imagem_vida = pygame.transform.scale(pygame.image.load('./imagens/vida.png'), (34,34)).convert_alpha()
+        self.imagem_rum = pygame.transform.scale(pygame.image.load('./imagens/rum.png'), (90,90)).convert_alpha()
+        self.imagem_sucata = pygame.transform.scale(pygame.image.load('./imagens/sucata.png'), (45,45)).convert_alpha()
+        self.imagem_inimigos_mortos = pygame.transform.scale(pygame.image.load('./imagens/inimigos_mortos.png'), (38,38)).convert_alpha()
         self.player = Player(self.tela, self.largura_tela // 2 - 50, self.altura_tela - 350, self.largura_tela)
         self.inimigo_principal = Inimigos(0, 0, self.tela, self.velocidade_inimigo, self.imagem_inimigo)
         self.inimigos.append(self.inimigo_principal)
@@ -60,20 +65,32 @@ class Jogo:
 
     def desenhar_contadores(self):
         fonte = pygame.font.SysFont(None, 36)
-        texto_vida = fonte.render(f"Vida: {self.player.vida}", True, (255, 0, 0))
-        texto_moeda = fonte.render(f"Moedas: {self.contador_moedas}", True, (255, 255, 0))
-        texto_sucata = fonte.render(f"Sucata: {self.contador_sucata}", True, (128, 128, 128))
-        texto_rum = fonte.render(f"Rum: {self.contador_rum}", True, (0, 255, 0))
-        texto_inimigos_mortos = fonte.render(f"Inimigos Mortos: {self.contador_inimigos_mortos}", True, (255, 255, 255))
-        fase = fonte.render(f"{self.fase}", True, (255, 255, 255))
-
-
-        self.tela.blit(texto_vida, (10, 10))
-        self.tela.blit(texto_moeda, (10, 50))
-        self.tela.blit(texto_sucata, (10, 90))
-        self.tela.blit(texto_rum, (10, 130))
-        self.tela.blit(texto_inimigos_mortos, (10, 170))  # Novo contador
-        self.tela.blit(fase, (10, 210))  # Novo contador
+        contador_vidas = fonte.render(f"{self.player.vida + 1}", True, (255, 255, 255))
+        contador_moedas = fonte.render(f"{self.contador_moedas}", True, (255, 255, 255))
+        contador_sucatas = fonte.render(f"{self.contador_sucata}", True, (255, 255, 255))
+        contador_rum = fonte.render(f"{self.contador_rum}", True, (255, 255, 255))
+        contador_inimigos_mortos = fonte.render(f"{self.contador_inimigos_mortos}", True, (255, 255, 255))
+        if self.fase == "fase_1":
+            fase = fonte.render(f"Fase 1", True, (255, 255, 255))
+        elif self.fase == "fase_2":
+            fase = fonte.render(f"Fase 2", True, (255, 255, 255))
+        elif self.fase == "fase_3":
+            fase = fonte.render(f"Fase 3", True, (255, 255, 255))
+        if self.fase == "boss":
+            fase = fonte.render(f"BOSS", True, (255, 255, 255))
+        self.tela.blit(self.imagem_rum, self.imagem_rum.get_rect(topleft = (1645 + 20, 50 - 20)))
+        self.tela.blit(self.imagem_vida, self.imagem_vida.get_rect(topleft = (1390 + 20, 75 - 20)))
+        self.tela.blit(self.imagem_sucata, self.imagem_sucata.get_rect(topleft = (1480 + 20, 65 - 20)))
+        self.tela.blit(self.imagem_inimigos_mortos, self.imagem_inimigos_mortos.get_rect(topleft = (1750 + 20, 70 - 20)))
+        self.tela.blit(self.imagem_moedas, self.imagem_moedas.get_rect(topleft = (1580 + 20, 65 - 20)))
+        
+        self.tela.blit(contador_vidas, (1448 + 20, 80 - 20))
+        self.tela.blit(contador_moedas, (1630 + 20, 80 - 20))
+        self.tela.blit(contador_sucatas, (1540 + 20, 80 - 20))
+        self.tela.blit(contador_rum, (1720 + 20, 80 - 20))
+        self.tela.blit(contador_inimigos_mortos, (1800 + 20, 80 - 20))  # Novo contador
+        
+        self.tela.blit(fase, (1740 + 20, 122 - 20))  # Novo contador
 
 
     def checar_colisoes(self):
