@@ -45,6 +45,17 @@ class Jogo:
         self.imagem_rum = pygame.transform.scale(pygame.image.load('./imagens/rum.png'), (90,90)).convert_alpha()
         self.imagem_sucata = pygame.transform.scale(pygame.image.load('./imagens/sucata.png'), (45,45)).convert_alpha()
         self.imagem_inimigos_mortos = pygame.transform.scale(pygame.image.load('./imagens/inimigos_mortos.png'), (38,38)).convert_alpha()
+        self.imagem_fundo_menu_original = pygame.image.load('./imagens/fundo.jpg').convert()
+        self.imagem_fundo_menu = pygame.transform.scale(self.imagem_fundo_menu_original, (self.largura_tela, self.altura_tela))
+        self.imagem_fundo_perda_original = pygame.image.load('./imagens/gameover.jpg').convert()
+        self.imagem_fundo_perda = pygame.transform.scale(self.imagem_fundo_perda_original, (self.largura_tela, self.altura_tela))
+        self.imagem_fundo_vitoria_original = pygame.image.load('./imagens/vitoria.jpg').convert()
+        self.imagem_fundo_vitoria = pygame.transform.scale(self.imagem_fundo_vitoria_original, (self.largura_tela, self.altura_tela))
+        self.fonte_menu = pygame.font.Font('./imagens/Crang.ttf', 90)  # Tamanho ajustado
+        self.fonte_menor = pygame.font.Font('./imagens/Crang.ttf', 60)
+        self.fonte_informaçao = pygame.font.Font('./imagens/Crang.ttf', 40)
+        self.fonte_game_over = pygame.font.Font('./imagens/Crang.ttf', 60)
+        
         self.player = Player(self.tela, self.largura_tela // 2 - 50, self.altura_tela - 350, self.largura_tela)
         self.inimigo_principal = Inimigos(0, 0, self.tela, self.velocidade_inimigo, self.imagem_inimigo)
         self.inimigos.append(self.inimigo_principal)
@@ -55,13 +66,119 @@ class Jogo:
         self.velocidade_tiro_inimigo = 8
         self.boss = Boss(0,0)
         self.tiro_eespecial = False
+    
+    def desenhar_menu(self):
+        self.tela.blit(self.imagem_fundo_menu, (0, 0))  # Desenha o fundo do menu
 
-    def desenhar_menu(self, mensagem):
-        self.tela.fill((0, 0, 0))
-        fonte = pygame.font.SysFont(None, 74)
-        texto = fonte.render(mensagem, True, (255, 255, 255))
-        self.tela.blit(texto, (self.largura_tela // 2 - texto.get_width() // 2, self.altura_tela // 2 - texto.get_height() // 2))
+        # Mensagem de título
+        titulo = "SEA MONSTERS"
+        texto_titulo = self.fonte_menu.render(titulo, True, (0, 0, 0))  # Fonte e cor do texto
+        largura_titulo = texto_titulo.get_width()
+        altura_titulo = texto_titulo.get_height()
+        pos_x_titulo = self.largura_tela // 2 - largura_titulo // 2
+        pos_y_titulo = 100  # Ajuste o valor para mover o título mais para baixo
+
+        # Mensagem de instrução
+        instrucoes = "aperte enter para começar"
+        texto_instrucoes = self.fonte_menor.render(instrucoes, True, (255, 255, 255))  # Fonte e cor do texto
+        largura_instrucoes = texto_instrucoes.get_width()
+        altura_instrucoes = texto_instrucoes.get_height()
+        pos_x_instrucoes = self.largura_tela // 2 - largura_instrucoes // 2
+        pos_y_instrucoes = self.altura_tela // 2 - altura_instrucoes // 2  # Centro vertical
+
+        # Instruções de controle
+        controle_titulo = "CONTROLES"
+        texto_controle_titulo = self.fonte_menor.render(controle_titulo, True, (255, 255, 255))
+        largura_controle_titulo = texto_controle_titulo.get_width()
+        altura_controle_titulo = texto_controle_titulo.get_height()
+        pos_x_controle_titulo = self.largura_tela // 2 - largura_controle_titulo // 2
+        pos_y_controle_titulo = self.altura_tela - 300  # Ajuste o valor para posicionar a seção de controles
+
+        controle_mover_direita = "Movimento: seta direita p direita, seta esquerda p esquerda"
+        controle_atirar = "Atirar: espaço"
+        controle_ataque = "Ataque especial: Z"
+        
+        texto_controle_mover_direita = self.fonte_informaçao.render(controle_mover_direita, True, (255, 255, 255))
+        texto_controle_atirar = self.fonte_informaçao.render(controle_atirar, True, (255, 255, 255))
+        texto_controle_ataque = self.fonte_informaçao.render(controle_ataque, True, (255, 255, 255))
+        
+        largura_controle_mover_direita = texto_controle_mover_direita.get_width()
+        largura_controle_atirar = texto_controle_atirar.get_width()
+        largura_controle_ataque = texto_controle_ataque.get_width()
+        
+        altura_controle_mover_direita = texto_controle_mover_direita.get_height()
+        altura_controle_atirar = texto_controle_atirar.get_height()
+        altura_controle_ataque = texto_controle_ataque.get_height()
+        
+        pos_x_controle_mover_direita = self.largura_tela // 2 - largura_controle_mover_direita // 2
+        pos_x_controle_atirar = self.largura_tela // 2 - largura_controle_atirar // 2
+        pos_x_controle_ataque = self.largura_tela // 2 - largura_controle_ataque // 2
+        
+        pos_y_controle_mover_direita = pos_y_controle_titulo + altura_controle_titulo + 20
+        pos_y_controle_atirar = pos_y_controle_mover_direita + altura_controle_mover_direita + 10
+        pos_y_controle_ataque = pos_y_controle_atirar + altura_controle_atirar + 10
+
+        # Desenha o texto na tela
+        self.tela.blit(texto_titulo, (pos_x_titulo, pos_y_titulo))
+        self.tela.blit(texto_instrucoes, (pos_x_instrucoes, pos_y_instrucoes))
+
+        # Desenha as instruções de controle
+        self.tela.blit(texto_controle_titulo, (pos_x_controle_titulo, pos_y_controle_titulo))
+        self.tela.blit(texto_controle_mover_direita, (pos_x_controle_mover_direita, pos_y_controle_mover_direita))
+        self.tela.blit(texto_controle_atirar, (pos_x_controle_atirar, pos_y_controle_atirar))
+        self.tela.blit(texto_controle_ataque, (pos_x_controle_ataque, pos_y_controle_ataque))
+
         pygame.display.flip()
+
+    def desenhar_perda(self, ):
+        self.tela.blit(self.imagem_fundo_perda, (0, 0))  # Desenha o fundo da tela de Game Over
+
+        # Mensagem de Game Over
+        game_over_texto = "GAME OVER"
+        texto_game_over = self.fonte_menu.render(game_over_texto, True, (255, 0, 0))  # Fonte e cor do texto
+        largura_game_over = texto_game_over.get_width()
+        altura_game_over = texto_game_over.get_height()
+        pos_x_game_over = self.largura_tela // 2 - largura_game_over // 2
+        pos_y_game_over = self.altura_tela // 2 - altura_game_over // 2 - 50  # Centralizado e um pouco mais acima
+
+        # Mensagem de instrução para reiniciar ou sair
+        instrucoes_game_over = "aperte enter para reiniciar ou esc para sair"
+        texto_instrucoes_game_over = self.fonte_menor.render(instrucoes_game_over, True, (255, 255, 255))  # Fonte e cor do texto
+        largura_instrucoes_game_over = texto_instrucoes_game_over.get_width()
+        altura_instrucoes_game_over = texto_instrucoes_game_over.get_height()
+        pos_x_instrucoes_game_over = self.largura_tela // 2 - largura_instrucoes_game_over // 2
+        pos_y_instrucoes_game_over = self.altura_tela // 2 + altura_game_over // 2 + 20  # Centralizado e um pouco mais abaixo
+
+        # Desenha o texto na tela
+        self.tela.blit(texto_game_over, (pos_x_game_over, pos_y_game_over))
+        self.tela.blit(texto_instrucoes_game_over, (pos_x_instrucoes_game_over, pos_y_instrucoes_game_over))
+
+        pygame.display.flip() 
+    
+    def desenhar_vitoria(self):
+        self.tela.blit(self.imagem_fundo_vitoria, (0, 0))  # Desenha o fundo da tela de Vitória
+
+        # Mensagem de Vitória
+        vitoria_texto = "Parabéns! Você ganhou"
+        texto_vitoria = self.fonte_menu.render(vitoria_texto, True, (0, 255, 0))  # Fonte e cor do texto
+        largura_vitoria = texto_vitoria.get_width()
+        altura_vitoria = texto_vitoria.get_height()
+        pos_x_vitoria = self.largura_tela // 2 - largura_vitoria // 2
+        pos_y_vitoria = self.altura_tela // 2 - altura_vitoria // 2 - 50  # Centralizado e um pouco mais acima
+
+        # Mensagem de instrução para reiniciar ou sair
+        instrucoes_vitoria = "aperte enter para reiniciar ou esc para sair"
+        texto_instrucoes_vitoria = self.fonte_menor.render(instrucoes_vitoria, True, (255, 255, 255))  # Fonte e cor do texto
+        largura_instrucoes_vitoria = texto_instrucoes_vitoria.get_width()
+        altura_instrucoes_vitoria = texto_instrucoes_vitoria.get_height()
+        pos_x_instrucoes_vitoria = self.largura_tela // 2 - largura_instrucoes_vitoria // 2
+        pos_y_instrucoes_vitoria = self.altura_tela // 2 + altura_vitoria // 2 + 20  # Centralizado e um pouco mais abaixo
+
+        # Desenha o texto na tela
+        self.tela.blit(texto_vitoria, (pos_x_vitoria, pos_y_vitoria))
+        self.tela.blit(texto_instrucoes_vitoria, (pos_x_instrucoes_vitoria, pos_y_instrucoes_vitoria))
+
+        pygame.display.flip() 
 
     def desenhar_contadores(self):
         fonte = pygame.font.SysFont(None, 36)
@@ -305,7 +422,7 @@ class Jogo:
 
 
             if self.menu:
-                self.desenhar_menu("BEM VINDO! APERTE ENTER PARA COMEÇAR")
+                self.desenhar_menu()
 
             elif self.jogo:
                 self.tela.fill('Blue')
@@ -440,9 +557,9 @@ class Jogo:
 
             elif self.vitoria:
                 self.jogo = False
-                self.desenhar_menu('VITORIA')
+                self.desenhar_vitoria()
             elif not self.jogo:
-                self.desenhar_menu('VOCÊ PERDEU! APERTE ENTER PARA REINICIAR OU ESC PARA FECHAR')
+                self.desenhar_perda()
 
 if __name__ == "__main__":
     jogo = Jogo()
