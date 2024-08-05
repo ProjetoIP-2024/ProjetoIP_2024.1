@@ -4,10 +4,15 @@ Sea Monsters é um jogo inspirado no clássico Space Invaders, mas com uma temá
 
 ## Integrantes do grupo e participação no projeto
 Henrique Xavier - Desenvolveu a estrutura e lógica do player – o objeto controlado pelo jogador – e também realizou contribuições para o jogo base e coletáveis e redação do README.md do projeto.
+
 Ian Monteiro - Escreveu a classe dos itens coletáveis, com todo o seu funcionamento, e estruturação da classe dos inimigos, além de criar um menu para o jogo, bem como uma tela de fim de jogo(“Game Over”) e uma de vitória.
+
 João Pedro Barbosa - Estruturou a lógica dos projéteis atirados pelo player, com todo o seu funcionamento e características secundárias, como aumento do número de tiros disparados – decorrente da evolução do jogador – e criação de um raio de explosão(“Dano em Área”). 
+
 Manoel Villarim - Responsável pela estrutura base do jogo, assim como o funcionamento dos inimigos e seus atributos. Também desenvolveu a lógica das colisões presentes no projeto. Organizou a apresentação de slides e corrigiu bugs do jogo.
+
 Ronaldo Felipe - Responsável pela organização das sprites utilizadas no decorrer do código e desenvolvimento dos obstáculos, além de introduzir efeitos sonoros ao jogo.
+
 Thiago Moraes - Ajudou na programação e lógica do menu do jogo, bem como contribuiu para a implementação dos efeitos sonoros.
 
 ## Funcionamento do jogo
