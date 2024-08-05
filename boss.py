@@ -9,7 +9,7 @@ class Boss:
         self.speed = 6
         self.ultimo_tempo = 0
         self.lasers = pygame.sprite.Group()
-        self.vida = 30
+        self.vida = 15
         self.shoot = False
         self.ultimo_tempo_inimigo = 0
         self.inimigo = False
