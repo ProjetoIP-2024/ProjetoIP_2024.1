@@ -24,23 +24,23 @@ Thiago Moraes - Ajudou na programação e lógica do menu do jogo, bem como cont
 ## Controles do jogo
 No menu inicial:
 
-Tecla retorno(Enter) - Ao ser pressionada, ela dá início ao jogo, momento em que ocorre a mudança de tela para o jogo principal.
+a) Tecla retorno(Enter) - Ao ser pressionada, ela dá início ao jogo, momento em que ocorre a mudança de tela para o jogo principal.
 
 No jogo principal:
 
-Tecla seta para a esquerda -  Esta tecla, ao ser pressionada, faz com que o player se desloque para a esquerda até chegar ao ponto onde a coordenada x do personagem, que está na posição (x,y) do plano, seja igual à 0.
+a) Tecla seta para a esquerda -  Esta tecla, ao ser pressionada, faz com que o player se desloque para a esquerda até chegar ao ponto onde a coordenada x do personagem, que está na posição (x,y) do plano, seja igual à 0.
 
-Tecla seta para a direita - Esta tecla, ao ser pressionada, faz com que o player se desloque para a esquerda até chegar ao ponto onde a coordenada x do personagem, que está na posição (x,y) do plano, seja igual ao tamanho máximo da tela no respectivo eixo(1920) subtraído do comprimento do objeto player.
+b) Tecla seta para a direita - Esta tecla, ao ser pressionada, faz com que o player se desloque para a esquerda até chegar ao ponto onde a coordenada x do personagem, que está na posição (x,y) do plano, seja igual ao tamanho máximo da tela no respectivo eixo(1920) subtraído do comprimento do objeto player.
 
-Tecla space(Espaço) - Ao ser pressionada, o player dispara um projétil(bala de canhão), que, ao colidir com um inimigo, mata-o e gera um derramamento de item.
+c) Tecla space(Espaço) - Ao ser pressionada, o player dispara um projétil(bala de canhão), que, ao colidir com um inimigo, mata-o e gera um derramamento de item.
 	
-Tecla z - Ao ser pressionada, o player pode disparar um tiro especial, mas apenas se o jogador possuir mais que um certo número de moedas(12).
+d) Tecla z - Ao ser pressionada, o player pode disparar um tiro especial, mas apenas se o jogador possuir mais que um certo número de moedas(12).
 
 No Game Over:
 
-Tecla escape(Esc) - Quando Esc é pressionado, o jogo automaticamente é finalizado. Basicamente, o jogador decide parar de jogar o jogo.
+a) Tecla escape(Esc) - Quando Esc é pressionado, o jogo automaticamente é finalizado. Basicamente, o jogador decide parar de jogar o jogo.
 
-Tecla return(Enter) - Ao pressionar Enter, o jogo é reiniciado, ou seja, o jogador perde e decide recomeçar a jogar.
+b) Tecla return(Enter) - Ao pressionar Enter, o jogo é reiniciado, ou seja, o jogador perde e decide recomeçar a jogar.
 
 ## Estrutura do projeto
 jogo.py - É o arquivo principal do trabalho. Nele, encontram-se tanto o código central de funcionamento do jogo, dentro da classe Jogo, como as importações e lógica de organização das classes presentes em outros arquivos dentro da pasta.
