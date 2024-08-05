@@ -3,7 +3,7 @@
 ![Print do jogo](https://github.com/ProjetoIP-2024/ProjetoIP_2024.1/blob/main/imagens/Vit%C3%B3ria.jpeg)
 
 ## Descrição do jogo
-Sea Monsters é um jogo inspirado no clássico Space Invaders, mas com uma temática diferente: o jogador controla um navio que deve, assim como no jogo clássico, matar inimigos(monstros do mar), tentando sobreviver. Simulando um ambiente marítimo, na perspectiva 2D e com um tamanho de tela igual à 1920x1080, Sea Monsters foi desenvolvido como trabalho final da disciplina de Introdução à Computação, da Universidade Federal de Pernambuco(UFPE).
+Sea Monsters é um jogo inspirado no clássico Space Invaders, mas com uma temática diferente: o jogador controla um navio que deve, assim como no jogo clássico, matar inimigos(monstros do mar), tentando sobreviver. Simulando um ambiente marítimo, na perspectiva 2D e com um tamanho de tela igual à 1920x1080, Sea Monsters foi desenvolvido como trabalho final da disciplina de Introdução à Programação, da Universidade Federal de Pernambuco(UFPE).
 
 ## Integrantes do grupo e participação no projeto
 Henrique Xavier - Desenvolveu a estrutura e lógica do player – o objeto controlado pelo jogador – e também realizou contribuições para o jogo base e coletáveis e redação do README.md do projeto.
