@@ -90,8 +90,9 @@ Durante o projeto, o grupo pode aprender diversos novos conceitos e formas de pr
 Ademais, saindo do mundo computacional, é possível afirmar que cada integrante do grupo pôde melhorar suas habilidades de trabalho em equipe e cooperação, realizando um projeto em que todos deveriam participar, com ideias e métodos de resolução distintos.
 
 ## Requisitos
-Python 3.x;
-Biblioteca Pygame(é possível instalar utilizando o comando, no terminal, pip install pygame).
+a) Python 3.x;
+
+b) Biblioteca Pygame(é possível instalar utilizando o comando, no terminal, pip install pygame).
 
 ## Bibliografia
 Building Space Invaders Using Pygame - Python : GeeksforGeeks. (2022, December 6). Building space invaders using pygame - python. https://www.geeksforgeeks.org/building-space-invaders-using-pygame-python/ 
