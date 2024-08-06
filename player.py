@@ -32,7 +32,7 @@ class Player(pygame.sprite.Sprite):
             self.shoot = True #Indica que atirou.
             self.tiros() #Chama a função de atirar
             print(self.level) #Printa o nível.
-            canhao_som = pygame.mixer.Sound('canhão_som.wav')
+            canhao_som = pygame.mixer.Sound('./efeitos_sonoros/canhão_som.wav')
             canhao_som.set_volume(0.1)
             canhao_som.play()
 
