@@ -43,7 +43,7 @@ class Inimigos(pygame.sprite.Sprite):
         tempo_atual = pygame.time.get_ticks()
         if tempo_atual - self.ultimo_tiro >= 5000:
             self.ultimo_tiro = tempo_atual
-            fogo_som = pygame.mixer.Sound('fogo_som.wav')
+            fogo_som = pygame.mixer.Sound('./efeitos_sonoros/fogo_som.wav')
             fogo_som.set_volume(0.4)
             fogo_som.play()
             return True
