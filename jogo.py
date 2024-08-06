@@ -72,7 +72,7 @@ class Jogo:
         self.boss = Boss(0, 0)
         self.tiro_eespecial = False
 
-        pygame.mixer.music.load('musica_jogo.mp3')
+        pygame.mixer.music.load('./efeitos_sonoros/musica_jogo.mp3')
         pygame.mixer.music.play(-1)
 
     def desenhar_menu(self):
@@ -229,7 +229,7 @@ class Jogo:
                         self.lista_lasers.remove(laser)
                         self.inimigos_vivos -= 1
                         self.contador_inimigos_mortos += 1  # Incrementar contador
-                        morte_inimigo_som = pygame.mixer.Sound('morte_inimigo_som.wav')
+                        morte_inimigo_som = pygame.mixer.Sound('./efeitos_sonoros/morte_inimigo_som.wav')
                         morte_inimigo_som.set_volume(0.2)
                         morte_inimigo_som.play()
 
@@ -277,7 +277,7 @@ class Jogo:
                         for explosao in self.explosoes[:]:
                             explosao.update()
                             self.tela.blit(explosao.image, explosao.rect)
-                            explosao_som = pygame.mixer.Sound('explosão_som.wav')
+                            explosao_som = pygame.mixer.Sound('./efeitos_sonoros/explosão_som.wav')
                             explosao_som.play()
                             if explosao.update():
                                 self.explosoes.remove(explosao)
@@ -336,7 +336,7 @@ class Jogo:
             elif pygame.sprite.collide_rect(laser, self.player):
                 self.player.receber_dano(1)
                 self.lista_lasers_inimigo.remove(laser)
-                dano_som = pygame.mixer.Sound('dano_som.wav')
+                dano_som = pygame.mixer.Sound('./efeitos_sonoros/dano_som.wav')
                 dano_som.play()
 
     def processar_coletaveis(self):
@@ -351,31 +351,31 @@ class Jogo:
                     self.já_evoluiu1 = True
                     self.player.evolucao_canhao_melhor(self.player.canhao_melhor)
                     self.player.level_up_3()
-                    up_som = pygame.mixer.Sound('up_som.wav')
+                    up_som = pygame.mixer.Sound('./efeitos_sonoros/up_som.wav')
                     up_som.play()
                 elif coletavel.tipo == 'canhao':
                     self.player.canhao = True
                     self.player.evolucao_canhao(self.player.canhao)
                     self.já_evoluiu2 = True
                     self.player.level_up_2()
-                    up_som = pygame.mixer.Sound('up_som.wav')
+                    up_som = pygame.mixer.Sound('./efeitos_sonoros/up_som.wav')
                     up_som.play()
                 elif coletavel.tipo == 'moeda':
                     print("Moeda coletada")
                     self.contador_moedas += 1
-                    moeda_som = pygame.mixer.Sound('moeda_som.wav')
+                    moeda_som = pygame.mixer.Sound('./efeitos_sonoros/moeda_som.wav')
                     moeda_som.play()
                 elif coletavel.tipo == 'sucata':
                     print("Sucata coletada")
                     self.contador_sucata += 1
                     self.player.receber_dano(1)
-                    sucata_som = pygame.mixer.Sound('sucata_som.wav')
+                    sucata_som = pygame.mixer.Sound('./efeitos_sonoros/dano_som.wav')
                     sucata_som.play()
                 elif coletavel.tipo == 'rum':
                     print('Rum coletado')
                     self.contador_rum += 1
                     self.player.velocidade += 0.25
-                    rum_som = pygame.mixer.Sound('rum_som.wav')
+                    rum_som = pygame.mixer.Sound('./efeitos_sonoros/rum_som.wav')
                     rum_som.play()
                 self.lista_coletaveis.remove(coletavel)
 
